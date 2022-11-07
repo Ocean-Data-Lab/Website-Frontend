@@ -19,7 +19,8 @@ import {
     getInitialGraph,
     getUpdatedGraph,
     getCTPInitialGraph,
-    getCTPInitialGraphLine
+    getCTPInitialGraphLine,
+    getWindRainGraph
 } from 'app/redux/actions/GraphActions'
 import Backdrop from '@mui/material/Backdrop'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
@@ -116,17 +117,22 @@ const specValid = ['Axial Base', 'Central Caldera', 'Eastern Caldera', 'Slope Ba
 const ctdValid = ['Oregon Offshore', 'Oregon Slope', 'Oregon Shelf', 'Axial Base']
 
 const GrapDialog = ({ currentLocation, open, handleClose }) => {
-    const [startDate, setStartDate] = useState('2018-03-01 00')
-    const [endDate, setEndDate] = useState('2018-03-02 23')
+    const [startDate, setStartDate] = useState('2017-03-01')
+    const [endDate, setEndDate] = useState('2017-03-02')
     const { palette } = useTheme()
     const dispatch = useDispatch()
     const textPrimary = palette.text.primary
     const [currType, setCurrType] = useState('Spectrogram')
     const [graphType, setGraphType] = useState('Spectrogram')
     const [meteGrahphType, setMeteGrahphType] = useState('WindSpeed')
+    const [meteWindSpeedType, setmeteWindSpeedType] = useState('WindMagnitude')
+    // ********* Get Graph *********
     const { initSpecGraph } = useSelector((state) => state.graph)
     const { initCtpGraph } = useSelector((state) => state.graph)
     const { initCtpGraphLine } = useSelector((state) => state.graph)
+    const { initWindRainGraph } = useSelector((state) => state.graph)
+
+    // **********
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState('')
     const [frequency, setFrequency] = useState(50)
@@ -162,10 +168,37 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
         )
     }
 
+    const removeFirstZeroInString = (str) => {
+        if (str.charAt(0) === '0')
+        {
+            str = str.slice(1);
+        }
+        return str
+    }
+
+    const processDateForWindRain = (dataString) => {
+        let dataLst = dataString.split("-")
+        return { "year": dataLst[0], "month": removeFirstZeroInString(dataLst[1]), "date": removeFirstZeroInString(dataLst[2])}
+    }
+    const fetchWindRainData = async () => {
+        let start = processDateForWindRain(startDate)
+        let end = processDateForWindRain(endDate)
+
+        await dispatch(
+            getWindRainGraph(
+                meteGrahphType,
+                start,
+                end,
+                currentLocation,
+                meteWindSpeedType
+            )
+        )
+    }
+
     const handleRadioChange = async (event) => {
         setSelectedValue(event.target.value)
-        setStartDate("2018-03-01")
-        setEndDate("2018-03-02")
+        setStartDate("2017-03-01")
+        setEndDate("2017-03-02")
         setError('')
         if (event.target.value === "CTD" && Object.keys(initCtpGraph).length === 0 && Object.keys(initCtpGraphLine).length === 0)
         {
@@ -175,6 +208,11 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                 fetchCTPData()
                 fetchCTDLineData()
             }
+        } else if (event.target.value === "Mete" && Object.keys(initWindRainGraph).length === 0)
+        {
+            setGraphType("WindSpeed")
+            setLoading(true)
+            fetchWindRainData()
         }
     }
 
@@ -186,6 +224,7 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
         inputProps: { 'aria-label': item },
     });
 
+    // load Spec graph for preview + remove the preview graph in other location
     useEffect(() => {
         setLoading(true)
         if (specValid.includes(currentLocation)) fetchSpecData()
@@ -199,6 +238,7 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
             })
         }
     }, [currentLocation])
+
 
     useEffect(() => {
         if (Object.keys(initCtpGraph).length !== 0)
@@ -239,6 +279,24 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
         }
     }, [initCtpGraphLine])
 
+    useEffect(() => {
+        if (Object.keys(initWindRainGraph).length !== 0)
+        {
+            const outer = document.getElementById("outer4")
+
+            const el = document.createElement('div')
+            el.setAttribute('id', "graphBox4")
+            outer.appendChild(el)
+            window.Bokeh.embed.embed_item(initWindRainGraph, "graphBox4")
+            setLoading(false)
+            return () => {
+                if (document.getElementById("graphBox4")) {
+                    const h1 = document.getElementById("graphBox4")
+                    h1.remove()
+                }
+            }
+        }
+    }, [initWindRainGraph])
 
     useEffect(() => {
         if (currType === 'Spectrogram' || currType === 'Octave Band')
@@ -269,6 +327,14 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
         setGraphType(event.target.value)
     }
 
+    const handleMeteTypeChange = (event) => {
+        setMeteGrahphType(event.target.value)
+    }
+    // set type for wind speed
+    const handleWindSpeedTypeChange = (event) => {
+        setmeteWindSpeedType(event.target.value)
+    }
+
     const handleFrequencyChange = (event) => {
         setFrequency(event.target.value)
     }
@@ -287,7 +353,10 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                     frequency
                 )
             )
-        } else
+        } else if (selectedValue === "Mete")
+        {
+            fetchWindRainData()
+        }else
         {
             dispatch(
                 getCTPInitialGraphLine(
@@ -429,50 +498,75 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                             Type
                                         </InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={graphType}
-                                            label="Type"
-                                            defaultValue={'Spectrogram'}
-                                            onChange={handleChange}
-                                        >
-                                            <MenuItem value={'Spectrogram'}>
-                                                Spectrogram
-                                            </MenuItem>
-                                            <MenuItem value={'SPDF'}>SPDF</MenuItem>
-                                            <MenuItem value={'Octave Band'}>
-                                                Octave Band
-                                            </MenuItem>
-                                        </Select>
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={graphType}
+                                                label="Type"
+                                                defaultValue={'Spectrogram'}
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value={'Spectrogram'}>
+                                                    Spectrogram
+                                                </MenuItem>
+                                                <MenuItem value={'SPDF'}>SPDF</MenuItem>
+                                                <MenuItem value={'Octave Band'}>
+                                                    Octave Band
+                                                </MenuItem>
+                                            </Select>
                                     </FormControl>
                                 </Grid>
                             }
-                            {/* Meteorology type select */}
+                            {/* windgraph type select */}
                             {
-                                selectedValue === "Mete" &&
+                                (selectedValue === "Mete") &&
                                 <Grid item lg={3} md={3} sm={6} xs={12}>
                                     <FormControl fullWidth sx={{ mb: 1, width: '100%' }}>
                                         <InputLabel id="demo-simple-select-label">
                                             Type
                                         </InputLabel>
                                         <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={meteGrahphType}
+                                                label="Type"
+                                                defaultValue={'WindSpeed'}
+                                                onChange={handleMeteTypeChange}
+                                            >
+                                                <MenuItem value={'WindSpeed'}>
+                                                Wind Speed
+                                                </MenuItem>
+                                                <MenuItem value={'RainRate'}>Precipitation Rate</MenuItem>
+                                            </Select>
+                                    </FormControl>
+                                </Grid>
+                            }
+                            {/* wind speed type */}
+                            {
+                                selectedValue === "Mete" && meteGrahphType === "WindSpeed" &&
+                                <Grid item lg={3} md={3} sm={6} xs={12}>
+                                    <FormControl fullWidth sx={{ mb: 1, width: '100%' }}>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Wind Speed Type
+                                        </InputLabel>
+                                        <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={meteGrahphType}
+                                            value={meteWindSpeedType}
                                             label="Type"
-                                            defaultValue={'WindSpeed'}
-                                            onChange={handleChange}
+                                            defaultValue={'WindMagnitude'}
+                                            onChange={handleWindSpeedTypeChange}
                                         >
-                                            <MenuItem value={'WindSpeed'}>
-                                                Wind speed
+                                            <MenuItem value={'WindMagnitude'}>
+                                                Wind Magnitude
                                             </MenuItem>
-                                            <MenuItem value={'RainRate'}>
-                                                Rain rate
+                                            <MenuItem value={'WindAngle'}>
+                                                Wind Angle
                                             </MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
                             }
+
 
                             {
                                 selectedValue === "Spec" &&
@@ -502,7 +596,8 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                 {
                     (
                         (selectedValue === 'Spec' && specValid.includes(currentLocation)) ||
-                        (selectedValue === 'CTD' && ctdValid.includes(currentLocation))
+                        (selectedValue === 'CTD' && ctdValid.includes(currentLocation)) ||
+                        (selectedValue === 'Mete')
                     ) &&
                     <>
                         <Grid container spacing={1} p={4} pt={1} pb={0}>
@@ -530,6 +625,7 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                             location={location}
                                             currentLocation={currentLocation}
                                             selectedValue={selectedValue}
+                                            meteGrahphType={meteGrahphType}
                                         />
 
 
@@ -545,6 +641,7 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                             selectedValue={selectedValue}
                                             name={selectedValue === "CTD" ? "PNG (left)" : "PNG"}
                                             ctdType="left"
+                                            meteGrahphType={meteGrahphType}
                                         />
                                         {/* display only when the the selected value is CTD */}
                                         {selectedValue === "CTD" &&
@@ -619,12 +716,21 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                         </FlexBox>
                     </Grid>
                 </Grid>
-                {/* render CTD data */}
+                {/* render CTD graph */}
                 <Grid container >
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <FlexBox>
                             <Box id="outer2" sx={{ width: '800px'}} className={clsx(selectedValue === "CTD" ? 'showGraph' : 'hideGraph')}></Box>
                             <Box id="outer3" sx={{ width: '400px'}} className={clsx(selectedValue === "CTD" ? 'showGraph' : 'hideGraph')}></Box>
+                        </FlexBox>
+                    </Grid>
+                </Grid>
+
+                {/* render Wind and Rain graph */}
+                <Grid container >
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <FlexBox>
+                            <Box id="outer4" className={clsx(selectedValue === "Mete" ? 'showGraph' : 'hideGraph')}></Box>
                         </FlexBox>
                     </Grid>
                 </Grid>

@@ -5,6 +5,7 @@ export const GET_CTP_INIT_GRAPH = 'GET_CTP_INIT_GRAPH'
 export const GET_UPDATE_GRAPH = 'GET_UPDATE_GRAPH'
 export const GET_UPDATE_CTD_GRAPH = "GET_UPDATE_CTD_GRAPH"
 export const GET_CTP_INIT_GRAPH_LINE = "GET_CTP_INIT_GRAPH_LINE"
+export const GET_WIND_RAIN_GRAPH = "GET_WIND_RAIN_GRAPH"
 
 export const getInitialGraph = (startDate, endDate, location) => (dispatch) => {
     axios
@@ -56,6 +57,17 @@ export const getUpdatedCtdGraph = () => (dispatch) => {
         .then((res) => {
             dispatch({
                 type: GET_UPDATE_CTD_GRAPH,
+                payload: res.data,
+            })
+        })
+}
+
+export const getWindRainGraph = (graphType, startDate, endDate, location, windSpeedType) => (dispatch) => {
+    axios
+        .post('/api/getWindRainGraph', { graphType, startDate, endDate, location, windSpeedType })
+        .then((res) => {
+            dispatch({
+                type: GET_WIND_RAIN_GRAPH,
                 payload: res.data,
             })
         })

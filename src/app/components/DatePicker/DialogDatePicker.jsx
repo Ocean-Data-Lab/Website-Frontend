@@ -33,6 +33,12 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
                 (current < moment.utc([2015, 0, 1]) ||
                 current > moment.utc([2022, 0, 2]))
             )
+        } else if (selectedValue === "Mete")
+        {
+            return (current &&
+                (current < moment.utc([2015, 4, 1]) ||
+                current > moment.utc([2022, 9, 25]))
+            )
         }
         return (
             current &&
@@ -80,7 +86,7 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
                     moment(endDate),
                 ]}
                 value={[moment(startDate), moment(endDate)]}
-                format={selectedValue === 'Spec' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD'}
+                format={'YYYY-MM-DD'}
                 onCalendarChange={handleCalendarChange}
                 disabledDate={disabledDate}
                 allowClear={false}

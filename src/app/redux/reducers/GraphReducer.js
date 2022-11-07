@@ -1,11 +1,12 @@
 import {
-    GET_INIT_GRAPH, GET_UPDATE_GRAPH, GET_CTP_INIT_GRAPH, GET_UPDATE_CTD_GRAPH, GET_CTP_INIT_GRAPH_LINE
+    GET_INIT_GRAPH, GET_UPDATE_GRAPH, GET_CTP_INIT_GRAPH, GET_UPDATE_CTD_GRAPH, GET_CTP_INIT_GRAPH_LINE, GET_WIND_RAIN_GRAPH
 } from '../actions/GraphActions'
 
 const initialState = {
     initSpecGraph: {},
     initCtpGraph: {},
     initCtpGraphLine: {},
+    initWindRainGraph: {},
     csv: {}
 }
 
@@ -40,6 +41,12 @@ const GraphReducer = function (state = initialState, action) {
             return {
                 ...state,
                 initCtpGraph: { ...action.payload }
+            }
+        }
+        case GET_WIND_RAIN_GRAPH: {
+            return {
+                ...state,
+                initWindRainGraph: { ...action.payload }
             }
         }
         default: {

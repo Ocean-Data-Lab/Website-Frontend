@@ -16,8 +16,22 @@ const StyledButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-const DownloadPng = ({currType, image, loading, setLoading, startDate, endDate, location, frequency, selectedValue, name, ctdType, ctdRightDate}) => {
+const DownloadPng = ({currType, image, loading, setLoading, startDate, endDate, location, frequency, selectedValue, name, ctdType, ctdRightDate, meteGrahphType}) => {
     const outputName = handleOutputName(location, startDate, endDate, selectedValue)
+
+    const removeFirstZeroInString = (str) => {
+        if (str.charAt(0) === '0')
+        {
+            str = str.slice(1);
+        }
+        return str
+    }
+
+    const processDateForWindRain = (dataString) => {
+        let dataLst = dataString.split("-")
+        return { "year": dataLst[0], "month": removeFirstZeroInString(dataLst[1]), "date": removeFirstZeroInString(dataLst[2])}
+    }
+
     const DownloadPNG = () => {
         if(currType === 'SPDF') {
             const linkSource = `data:image/jpeg;base64,${image}`
@@ -32,6 +46,13 @@ const DownloadPng = ({currType, image, loading, setLoading, startDate, endDate, 
                 currType = "CTD"
             }
             setLoading(true)
+
+            if (location === "oregon_shelf" || location === "oregon_offshore")
+            {
+                startDate = processDateForWindRain(startDate)
+                endDate = processDateForWindRain(endDate)
+            }
+
             axios({
                 method: 'post',
                 url: '/api/downloadPng',
@@ -43,7 +64,8 @@ const DownloadPng = ({currType, image, loading, setLoading, startDate, endDate, 
                     currType,
                     frequency,
                     ctdType,
-                    ctdRightDate
+                    ctdRightDate,
+                    meteGrahphType
                 }
             }).then((res) => {
                 setLoading(false)

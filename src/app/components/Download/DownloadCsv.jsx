@@ -18,20 +18,41 @@ const StyledButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-const DownloadCsv = ({ error, startDate, endDate, location, frequency, currType, setLoading, currentLocation, selectedValue, loading}) => {
+const DownloadCsv = ({ error, startDate, endDate, location, frequency, currType, setLoading, currentLocation, selectedValue, loading, meteGrahphType}) => {
     const [data, setData] = useState([])
     const csvLink = useRef(null)
 
+    const removeFirstZeroInString = (str) => {
+        if (str.charAt(0) === '0')
+        {
+            str = str.slice(1);
+        }
+        return str
+    }
+
+    const processDateForWindRain = (dataString) => {
+        let dataLst = dataString.split("-")
+        return { "year": dataLst[0], "month": removeFirstZeroInString(dataLst[1]), "date": removeFirstZeroInString(dataLst[2])}
+    }
+
     const downloadCSV = () => {
         setLoading(true)
-        axios
-            .post('/api/downloads', {
+
+        if (location === "oregon_shelf" || location === "oregon_offshore")
+        {
+            startDate = processDateForWindRain(startDate)
+            endDate = processDateForWindRain(endDate)
+        }
+
+
+        axios.post('/api/downloads', {
                 startDate,
                 endDate,
                 location,
                 currType,
                 frequency,
-                selectedValue
+                selectedValue,
+                meteGrahphType
             })
             .then((res) => {
                 setLoading(false)
@@ -42,6 +63,22 @@ const DownloadCsv = ({ error, startDate, endDate, location, frequency, currType,
 
     const handleCsvHeader = () => {
         if(selectedValue === "CTD") return null
+
+        if (selectedValue === "Mete" && meteGrahphType === "WindSpeed")
+        {
+            return [
+                { label: 'dateTime', key: 'dateTime' },
+                { label: 'eastward_wind_velocity', key: 'eastward_wind_velocity' },
+                { label: 'northward_wind_velocity', key: 'northward_wind_velocity' }
+            ]
+        } else if (selectedValue === "Mete" && meteGrahphType === "RainRate")
+        {
+            return [
+                { label: 'dateTime', key: 'dateTime' },
+                { label: 'precipitation', key: 'precipitation' },
+            ]
+        }
+
         switch (currType) {
             case 'Octave Band':
                 return OCTAVE_BAND
