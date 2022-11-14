@@ -6,7 +6,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { Paragraph } from 'app/components/Typography'
+import { Paragraph, H2 } from 'app/components/Typography'
 import { Box, styled } from '@mui/system'
 const StyledAccordion = styled(Accordion)(() => ({
     "& .MuiAccordionSummary-content": {
@@ -34,6 +34,7 @@ const AccordionDescrip = ({ selectedValue, currType }) => {
         Accordion.current.click();
     };
 
+
     return (
         <>
             <ButtonBox onClick={handleAccordion}>
@@ -45,6 +46,9 @@ const AccordionDescrip = ({ selectedValue, currType }) => {
                 </Paragraph>}
                 {selectedValue === 'CTD' && <Paragraph sx={{ ml: '-2px', fontWeight: '400'}}>
                     How is CTD generated?
+                </Paragraph>}
+                {selectedValue === 'Mete' && <Paragraph sx={{ ml: '-2px', fontWeight: '400'}}>
+                    How are wind Graph and rain graph generated?
                 </Paragraph>}
             </ButtonBox>
             <StyledAccordion
@@ -71,19 +75,36 @@ const AccordionDescrip = ({ selectedValue, currType }) => {
                     >
                 </AccordionSummary>
                 <AccordionDetails sx={{ mt: -2}}>
-                    {currType === 'Spectrogram' &&  <Paragraph sx={{ color: '#696665' }}>
+                    {selectedValue === "Spec" && currType === 'Spectrogram' &&  <Paragraph sx={{ color: '#696665' }}>
                         Low frequency spectrograms are calculated using a 15 min Welch-median PSD estimate using a Hann window, 512 FFT points, and 50% overlap.
                     </Paragraph>}
 
-                    {currType === 'SPDF' &&  <Paragraph sx={{ color: '#696665' }}>
-                    SPDFs are calculated from the long-term spectrograms by computing histograms for each frequency bin. Plotting the histogram values as a function of frequency and spectral level gives the desired SPDFs.
+                    {selectedValue === "Spec" && currType === 'SPDF' &&  <Paragraph sx={{ color: '#696665' }}>
+                        SPDFs are calculated from the long-term spectrograms by computing histograms for each frequency bin. Plotting the histogram values as a function of frequency and spectral level gives the desired SPDFs.
                     </Paragraph>}
+
+                    {selectedValue === "Mete" &&  <Paragraph sx={{ color: '#696665' }}>
+                        Wind Graph (at zero degree, wind direction is eastward): <br></br>
+                        1. If "Wind Magnitude" is selected, the wind speed is calculated throught the following formula:<br></br>
+                            wind magnitude = np.sqrt((eastward_wind_velocity)**2 + (northward_wind_velocity)**2)<br></br>
+                        2. If "Wind Angle" is selected, the wind speed is calculated throught the following formula:<br></br>
+                            wind angle = np.arctan2(northward_wind_velocity, eastward_wind_velocity)<br></br>
+                        <br></br>
+                        Rain Graph: <br></br>
+                        for the precipitation rate, two major operations are performed:<br></br>
+                        1. Time frames where sampling period changes are removed<br></br>
+                        2. Siphoning events are removed<br></br>
+                    </Paragraph>}
+
                     <br />
+
                     <Paragraph sx={{ color: '#696665' }}>
                     </Paragraph>
-                    <Paragraph sx={{ color: '#A09C9C',  fontStyle: 'italic' }}>
-                    Notice: For CSV downloading, if the table contains an empty value like "Nan", it will be replace by 0
-                    </Paragraph>
+                    {selectedValue !== "Mete" &&
+                        <Paragraph sx={{ color: '#A09C9C', fontStyle: 'italic' }}>
+                            Notice: For CSV downloading, if the table contains an empty value like "Nan", it will be replace by 0
+                        </Paragraph>
+                    }
                 </AccordionDetails>
             </StyledAccordion>
         </>
