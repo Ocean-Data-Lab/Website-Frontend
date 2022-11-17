@@ -68,14 +68,14 @@ const DownloadCsv = ({ error, startDate, endDate, location, frequency, currType,
         {
             return [
                 { label: 'dateTime', key: 'dateTime' },
-                { label: 'eastward_wind_velocity(radian)', key: 'eastward_wind_velocity' },
-                { label: 'northward_wind_velocity(radian)', key: 'northward_wind_velocity' }
+                { label: 'eastward_wind_velocity(m/s)', key: 'eastward_wind_velocity' },
+                { label: 'northward_wind_velocity(m/s)', key: 'northward_wind_velocity' }
             ]
         } else if (selectedValue === "Mete" && meteGrahphType === "RainRate")
         {
             return [
                 { label: 'dateTime', key: 'dateTime' },
-                { label: 'precipitation', key: 'precipitation' },
+                { label: 'precipitation rate(millimeter/hour)', key: 'precipitation' },
             ]
         }
 

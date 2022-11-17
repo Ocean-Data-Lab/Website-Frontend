@@ -18,9 +18,9 @@ export const getInitialGraph = (startDate, endDate, location) => (dispatch) => {
         })
 }
 
-export const getCTPInitialGraph = (location) => (dispatch) => {
+export const getCTPInitialGraph = (location, startDate, endDate) => (dispatch) => {
     axios
-        .post('/api/getCTP', { location })
+        .post('/api/getCTP', { location, startDate, endDate })
         .then((res) => {
             dispatch({
                 type: GET_CTP_INIT_GRAPH,
@@ -51,9 +51,9 @@ export const getUpdatedGraph = (startDate, endDate, graphType, location, frequen
         })
 }
 
-export const getUpdatedCtdGraph = () => (dispatch) => {
+export const getUpdatedCtdGraph = (location, startDate, endDate) => (dispatch) => {
     axios
-        .post('/api/getUpdateCtpGraph', {})
+        .post('/api/getUpdateCtpGraph', { location, startDate, endDate })
         .then((res) => {
             dispatch({
                 type: GET_UPDATE_CTD_GRAPH,

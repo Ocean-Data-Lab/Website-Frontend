@@ -157,7 +157,9 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
     const fetchCTPData = async () => {
         await dispatch(
             getCTPInitialGraph(
-                location
+                location,
+                startDate,
+                endDate
             )
         )
     }
@@ -363,7 +365,16 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
         } else if (selectedValue === "Mete")
         {
             fetchWindRainData()
-        }else
+        }else if (selectedValue === "CTD" && ctdType === "Longterm")
+        {
+            dispatch(
+                getCTPInitialGraph(
+                    location,
+                    startDate,
+                    endDate
+                )
+            )
+        } else if (selectedValue === "CTD" && ctdType === "Shortterm")
         {
             dispatch(
                 getCTPInitialGraphLine(
@@ -734,8 +745,10 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                 <Grid container >
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <FlexBox>
-                            <Box id="outer2" sx={{ width: '800px'}} className={clsx(selectedValue === "CTD" && ctdType === "Longterm" ? 'showGraph' : 'hideGraph')}></Box>
-                            <Box id="outer3" sx={{ width: '400px'}} className={clsx(selectedValue === "CTD" && ctdType === "Shortterm" ? 'showGraph' : 'hideGraph')}></Box>
+                            <Box id="outer2" className={clsx(selectedValue === "CTD" && ctdType === "Longterm" ? 'showGraph' : 'hideGraph')}></Box>
+                            <Box id="outer3" className={clsx(selectedValue === "CTD" && ctdType === "Shortterm" ? 'showGraph' : 'hideGraph')}></Box>
+                            {/* <Box id="outer2" sx={{ width: '800px'}} className={clsx(selectedValue === "CTD" && ctdType === "Longterm" ? 'showGraph' : 'hideGraph')}></Box>
+                            <Box id="outer3" sx={{ width: '400px'}} className={clsx(selectedValue === "CTD" && ctdType === "Shortterm" ? 'showGraph' : 'hideGraph')}></Box> */}
                         </FlexBox>
                     </Grid>
                 </Grid>
