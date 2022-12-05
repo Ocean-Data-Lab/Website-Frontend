@@ -123,10 +123,12 @@ const Layout1Topbar = () => {
                                     Ocean Data Lab&nbsp;
                                 </a>
                                 at the University of Washington has developed a web-based interactive ocean soundscape that will enable users to visualize and explore a wide variety of underwater noise metrics and other related data products. The raw data used in this project is collected by the REgional Cabled Array and the Coastal Endurance Array of the&nbsp;
-                                <a href="https://sites.uw.edu/abadi/people/" target="_blank" rel="noreferrer">
+                                <a href="https://oceanobservatories.org/" target="_blank" rel="noreferrer">
                                 Ocean Observatories Initiative (OOI)
                                 </a>
-                                . The raw data is processed by OOIPY, a Python library developed by our team, to calculate different data products that are required for a comprehensive ocean soundscape analysis.
+                                . The raw data is processed by <a href="https://oceanobservatories.org/" target="_blank" rel="noreferrer">
+                                OOIPY
+                                </a>, a Python library developed by our team, to calculate different data products that are required for a comprehensive ocean soundscape analysis.
                             </Paragraph>
                         </ChunkBox>
 

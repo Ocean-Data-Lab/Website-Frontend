@@ -19,7 +19,7 @@ const LabLogo = styled('img')(() => ({
 }))
 
 const Labtitle = styled(H4)(() => ({
-    width: '120px',
+    width: '160px',
     color: '#0743a6',
     fontSize: '15px',
     marginLeft: '-5px'
@@ -41,7 +41,7 @@ const Brand = ({ children }) => {
                 {/* <MatxLogo /> */}
                 <LabLogo src={'/assets/images/logos/labLogo.png'} />
                 <StyledSpan className="sidenavHoverShow">
-                    <Labtitle>Ocean Data Lab</Labtitle>
+                    <Labtitle>Ocean Noise Explorer</Labtitle>
                 </StyledSpan>
                 <IMG src={'/assets/images/logos/uw.png'} />
             </Box>

@@ -73,7 +73,7 @@ const VideoPage = () => {
                     <StyledHeader>
                         Welcome to the Ocean Data Lab video gallery
                     </StyledHeader>
-                    <H4>here are some interesting sound event</H4>
+                    <H4>here are some interesting sound events</H4>
                 </Grid>
                 {createVideoChunk("xp5jJUeLNRw", "Airgun Pulses", "Axial Base Seafloor (Fs = 64 kHz)", "2019-08-01 15:00:03", "2019-08-01 15:00:20", "broadband")}
 

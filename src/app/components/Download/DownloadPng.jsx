@@ -78,7 +78,8 @@ const DownloadPng = ({currType, image, loading, setLoading, startDate, endDate, 
     return (
         <StyledButton
             variant="contained"
-            disabled={loading === true}
+            // disabled={loading === true}
+            disabled={true}
             onClick={DownloadPNG}
         >
             <DownloadIcon sx={{ mr: 1 }} />

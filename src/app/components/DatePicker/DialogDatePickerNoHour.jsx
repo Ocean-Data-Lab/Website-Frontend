@@ -25,7 +25,7 @@ const Notice = styled(Box)(({ theme }) => ({
 
 const { RangePicker } = DatePicker
 
-const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDate, selectedValue, error }) => {
+const DialogDatePickerNoHour = ({ startDate, endDate, setError, setStartDate, setEndDate, selectedValue, error }) => {
 
     const disabledDate = (current) => {
         if (selectedValue === "CTD")
@@ -93,7 +93,7 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
                     moment(endDate),
                 ]}
                 value={[moment(startDate), moment(endDate)]}
-                format={selectedValue === "Spec" ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD'}
+                format={'YYYY-MM-DD'}
                 onCalendarChange={handleCalendarChange}
                 disabledDate={disabledDate}
                 allowClear={false}
@@ -108,4 +108,4 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
     )
 }
 
-export default DialogDatePicker
+export default DialogDatePickerNoHour
