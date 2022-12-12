@@ -7,8 +7,10 @@ import esriConfig from "@arcgis/core/config";
 import TimeSlider from "@arcgis/core/widgets/TimeSlider";
 import Field from "@arcgis/core/layers/support/Field";
 import TimeInfo from "@arcgis/core/layers/support/TimeInfo";
-
+import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 // let temp = {"LAT": 45.98938, "LON": -130.7382, "BaseTime": "2017-07-03 13:02:36"}
+
+import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
 
 const HYDROPHONES = [
     { location: 'Slope Base', latitude: 44.5153, longitude: -125.39 },
@@ -25,11 +27,32 @@ const noop = () => { };
 
 esriConfig.apiKey = "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8";
 
+// https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer
 
-const layer = new FeatureLayer({
-    url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_ship_ais/FeatureServer/0"
-});
+// let layer = new MapImageLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
+// });
 
+
+// const layer = new FeatureLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_column/FeatureServer/0",
+//     mode: "ondemand",
+//     timeOptions: {
+//         timeDataCumulative: false,
+//         timeOffset: 0,
+//         timeOffsetUnits: "esriTimeUnitsSeconds"
+//     }
+// });
+// const layer = new MapImageLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
+// })
+
+// const layer = new VectorTileLayer({
+//     url: "https://vectortileservices8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ship_location_extra_tile/VectorTileServer"
+//   });
+// const layer = new VectorTileLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
+//   });
 
 // ******* create timeslider ********
 export const webmap = new WebMap({
@@ -37,7 +60,7 @@ export const webmap = new WebMap({
         id: "aa1d3f80270146208328cf66d022e09c",
     },
     basemap: "arcgis-oceans",
-    layers: [layer]
+    // layers: [layer]
 });
 
 export const view = new MapView({
@@ -107,52 +130,52 @@ export const view = new MapView({
 //     })
 // });
 
-layer.renderer = {
-    type: "simple",  // autocasts as new SimpleRenderer()
-    symbol: {
-        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-        size: 2,
-        color: [113, 15, 184],
-        outline: {  // autocasts as new SimpleLineSymbol()
-            width: 0.1,
-            color: "white"
-        }
-    }
-};
 
 
 
-let timeSlider;
-TimeSlider.getPropertiesFromWebMap(webmap).then(
-    (timeSliderSettings) => {
-        const timeSliderDiv = document.createElement("div");
-        timeSliderDiv.id = "timeSliderDiv";
-        timeSliderDiv.style.width = "600px";
-        timeSlider = new TimeSlider({
-            ...timeSliderSettings, // imported settings from webmap
-            view: view,
-            container: timeSliderDiv,
-            fullTimeExtent: {
-                start: new Date(2015, 0, 1),
-                end: new Date(2020, 11, 31)
-            },
-        });
-        // view.whenLayerView(layer).then((lv) => {
-        //     // around up the full time extent to full hour
-        //     timeSlider.fullTimeExtent =
-        //     layer.timeInfo.fullTimeExtent.expandTo("hours");
-        // });
-        view.ui.add(timeSlider, "bottom-left");
-    }
-);
+// let timeSlider;
+// TimeSlider.getPropertiesFromWebMap(webmap).then(
+//     (timeSliderSettings) => {
+//         const timeSliderDiv = document.createElement("div");
+//         timeSliderDiv.id = "timeSliderDiv";
+//         timeSliderDiv.style.width = "600px";
+//         timeSlider = new TimeSlider({
+//             ...timeSliderSettings, // imported settings from webmap
+//             view: view,
+//             container: timeSliderDiv,
+//             fullTimeExtent: {
+//                 start: new Date(2015, 0, 1),
+//                 end: new Date(2020, 11, 31)
+//             },
+//         });
+//         // view.whenLayerView(layer).then((lv) => {
+//         //     // around up the full time extent to full hour
+//         //     timeSlider.fullTimeExtent =
+//         //     layer.timeInfo.fullTimeExtent.expandTo("hours");
+//         // });
+//         view.ui.add(timeSlider, "bottom-left");
+//     }
+// );
 
+// layer.renderer = {
+//     type: "simple",  // autocasts as new SimpleRenderer()
+//     symbol: {
+//         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+//         size: 2,
+//         color: [113, 15, 184],
+//         outline: {  // autocasts as new SimpleLineSymbol()
+//             width: 0.1,
+//             color: "white"
+//         }
+//     }
+// };
 
 // webmap.add(layer)
 
 // ********* from here, render the major components in map *********
 HYDROPHONES.forEach(element => {
     const measureThisAction = {
-        title: "Get Info",
+        title: "Explore Data",
         id: "show_popup",
         location: element.location
     };

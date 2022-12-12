@@ -24,6 +24,10 @@ const VideoIntro = styled(Box)(() => ({
     fontWeight: 700,
     marginBottom: '10px',
 }))
+const Note = styled(Box)(() => ({
+    fontSize: '14px',
+    color: '#7e7f80',
+}))
 
 const YoutubeEmbed = ({
     embedId,
@@ -90,9 +94,13 @@ const VideoPage = () => {
                     mb={6}
                 >
                     <StyledHeader>
-                        Welcome to the Ocean Data Lab Video Gallery
+                        Welcome to the Ocean Noice Explorer Video Gallery
                     </StyledHeader>
                     <H4>here are some interesting sound events</H4>
+                    <Note>
+                        Note: Sample rate of the sound files are adjusted to speed up
+                        the audio
+                    </Note>
                 </Grid>
                 {createVideoChunk(
                     'xp5jJUeLNRw',

@@ -128,7 +128,7 @@ const ctdValid = [
 
 const GrapDialog = ({ currentLocation, open, handleClose }) => {
     const [startDate, setStartDate] = useState('2020-01-01')
-    const [endDate, setEndDate] = useState('2020-02-02')
+    const [endDate, setEndDate] = useState('2020-02-02 23')
     const { palette } = useTheme()
     const dispatch = useDispatch()
     const textPrimary = palette.text.primary
@@ -727,12 +727,15 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
 
                 {!specValid.includes(currentLocation) &&
                     selectedValue === 'Spec' && (
-                        <Box sx={{ ml: 5 }}>Currently Not Available</Box>
+                        <Box sx={{ ml: 5 }}>
+                            This location doesn't have a low frequency
+                            hydrophone
+                        </Box>
                     )}
 
                 {!ctdValid.includes(currentLocation) &&
                     selectedValue === 'CTD' && (
-                        <Box sx={{ ml: 5 }}>Currently Not Available</Box>
+                        <Box sx={{ ml: 5 }}>This location doesn't have CTD</Box>
                     )}
 
                 <Grid container>

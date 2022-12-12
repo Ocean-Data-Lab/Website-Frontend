@@ -49,10 +49,15 @@ const ChunkBox = styled('div')(() => ({
 const InfoBox = styled(Box)(() => ({
     display: 'flex',
 }))
+const LabLogo = styled('img')(() => ({
+    width: '50px',
+    marginRight: '10px',
+    marginBottom: '30px',
+}))
 
 const Options = styled(H4)(({ theme }) => ({
     margin: '15px',
-    cursor: 'pointer'
+    cursor: 'pointer',
 }))
 
 // d
@@ -88,7 +93,9 @@ const Layout1Topbar = () => {
                         <Options>Gallery</Options>
                     </Link>
                     {/* <Options>Videos</Options> */}
-                    <Options onClick={toggleDrawer(anchor, true)}>About</Options>
+                    <Options onClick={toggleDrawer(anchor, true)}>
+                        About
+                    </Options>
                 </InfoBox>
                 <Drawer
                     anchor={anchor}
@@ -97,6 +104,7 @@ const Layout1Topbar = () => {
                     p={4}
                 >
                     <ContentBox>
+                        <LabLogo src={'/assets/images/logos/one.png'} />
                         <ChunkBox>
                             <H4 sx={{ mb: 1, fontWeight: 800 }}>Director</H4>
                             <Paragraph
@@ -112,6 +120,7 @@ const Layout1Topbar = () => {
 
                         <ChunkBox>
                             <H4 sx={{ mb: 1, fontWeight: 800 }}>About</H4>
+
                             <Paragraph
                                 sx={{
                                     mt: 0,
@@ -119,23 +128,52 @@ const Layout1Topbar = () => {
                                     overflow: 'hidden',
                                 }}
                             >
-                                <a href="https://sites.uw.edu/abadi/people/" target="_blank" rel="noreferrer">
+                                <a
+                                    href="https://sites.uw.edu/abadi/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
                                     Ocean Data Lab&nbsp;
                                 </a>
-                                at the University of Washington has developed a web-based interactive ocean soundscape that will enable users to visualize and explore a wide variety of underwater noise metrics and other related data products. The raw data used in this project is collected by the REgional Cabled Array and the Coastal Endurance Array of the&nbsp;
-                                <a href="https://oceanobservatories.org/" target="_blank" rel="noreferrer">
-                                Ocean Observatories Initiative (OOI)
+                                at the University of washington has developped
+                                ocean noise explorer (ONE), a web-based
+                                interactive ocean soundscape that will enable
+                                users to visualize and explore a wide variety of
+                                underwater noise metrics and other related data
+                                products. The raw data used in this project is
+                                collected by the Regional Cabled Array and the
+                                Coastal Endurance Array of the&nbsp;
+                                <a
+                                    href="https://oceanobservatories.org/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    Ocean Observatories Initiative (OOI)
                                 </a>
-                                . The raw data is processed by <a href="https://oceanobservatories.org/" target="_blank" rel="noreferrer">
-                                OOIPY
-                                </a>, a Python library developed by our team, to calculate different data products that are required for a comprehensive ocean soundscape analysis.
+                                . The raw data is processed by{' '}
+                                <a
+                                    href="https://ooipy.readthedocs.io/en/latest/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    OOIPY
+                                </a>
+                                , a Python library developed by our team, to
+                                calculate different data products that are
+                                required for a comprehensive ocean soundscape
+                                analysis.
                             </Paragraph>
                         </ChunkBox>
 
                         <ChunkBox>
-                            <H4 sx={{ mb: 1, fontWeight: 800 }}>Acknowledgement</H4>
+                            <H4 sx={{ mb: 1, fontWeight: 800 }}>
+                                Acknowledgement
+                            </H4>
                             <Box>
-                            We thank the Office of Naval Research (ONR) for funding this research project and the National Science Foundation (NSF) for funding the OOI infrastructure.
+                                We thank the Office of Naval Research (ONR) for
+                                funding this research project and the National
+                                Science Foundation (NSF) for funding the OOI
+                                infrastructure.
                             </Box>
                         </ChunkBox>
                     </ContentBox>

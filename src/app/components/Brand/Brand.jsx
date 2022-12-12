@@ -15,41 +15,39 @@ const StyledSpan = styled(Span)(() => ({
 }))
 
 const LabLogo = styled('img')(() => ({
-    width: '60px',
+    width: '50px',
+    marginRight: '6px',
+    marginTop: '-1px',
 }))
 
 const Labtitle = styled(H4)(() => ({
     width: '160px',
     color: '#0743a6',
+    fontWeight: 500,
     fontSize: '15px',
-    marginLeft: '-5px'
+    marginLeft: '-5px',
 }))
 
 const IMG = styled('img')(({ theme }) => ({
     width: '240px',
     marginLeft: '15px',
     [theme.breakpoints.down('md')]: {
-        display: 'none'
+        display: 'none',
     },
 }))
-
 
 const Brand = ({ children }) => {
     return (
         <BrandRoot sx={{ py: 1 }}>
             <Box display="flex" alignItems="center">
                 {/* <MatxLogo /> */}
-                <LabLogo src={'/assets/images/logos/labLogo.png'} />
+                <LabLogo src={'/assets/images/logos/one.png'} />
                 <StyledSpan className="sidenavHoverShow">
                     <Labtitle>Ocean Noise Explorer</Labtitle>
                 </StyledSpan>
                 <IMG src={'/assets/images/logos/uw.png'} />
             </Box>
-            <Box
-                className="sidenavHoverShow"
-            >
-                {children || null}
-            </Box>
+            <Box className="sidenavHoverShow">{children || null}</Box>
         </BrandRoot>
     )
 }
