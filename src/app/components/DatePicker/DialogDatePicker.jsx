@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { DatePicker } from 'antd'
 import { Box, styled } from '@mui/system'
 import * as moment from 'moment'
@@ -19,32 +19,39 @@ const Notice = styled(Box)(({ theme }) => ({
     bottom: '1px',
     fontSize: '12px',
     [theme.breakpoints.down('md')]: {
-        bottom: '-2px'
+        bottom: '-2px',
     },
 }))
 
 const { RangePicker } = DatePicker
 
-const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDate, selectedValue, error }) => {
-
+const DialogDatePicker = ({
+    startDate,
+    endDate,
+    setError,
+    setStartDate,
+    setEndDate,
+    selectedValue,
+    error,
+}) => {
     const disabledDate = (current) => {
-        if (selectedValue === "CTD")
-        {
-            return (current &&
+        if (selectedValue === 'CTD') {
+            return (
+                current &&
                 (current < moment.utc([2015, 0, 1]) ||
-                current > moment.utc([2022, 0, 2]))
+                    current > moment.utc([2022, 0, 2]))
             )
-        } else if (selectedValue === "Mete")
-        {
-            return (current &&
-                (current < moment.utc([2015, 4, 1]) ||
-                current > moment.utc([2022, 9, 25]))
+        } else if (selectedValue === 'Mete') {
+            return (
+                current &&
+                (current < moment.utc([2020, 1, 1]) ||
+                    current > moment.utc([2022, 11, 31]))
             )
         }
         return (
             current &&
             (current < moment.utc([2015, 0, 14]) ||
-            current > moment.utc([2020, 11, 31]))
+                current > moment.utc([2020, 11, 31]))
         )
     }
 
@@ -67,7 +74,6 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
                 .add(23, 'hours')
             const next = moment(futureMonth._d)
 
-
             setStartDate(dateStrings[0])
             setEndDate(next.format('YYYY-MM-DD HH'))
         } else {
@@ -81,29 +87,27 @@ const DialogDatePicker = ({ startDate, endDate, setError, setStartDate, setEndDa
     }
 
     return (
-        <DateBox style={{ width: '100%'  }}>
+        <DateBox style={{ width: '100%' }}>
             <RangePicker
                 size="large"
                 // disabled={selectedValue === 'Spec' ? [false, false] : [true, true]}
                 showTime={{
                     hideDisabledOptions: true,
                 }}
-                defaultValue={[
-                    moment(startDate),
-                    moment(endDate),
-                ]}
+                defaultValue={[moment(startDate), moment(endDate)]}
                 value={[moment(startDate), moment(endDate)]}
-                format={selectedValue === "Spec" ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD'}
+                format={
+                    selectedValue === 'Spec' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD'
+                }
                 onCalendarChange={handleCalendarChange}
                 disabledDate={disabledDate}
                 allowClear={false}
             />
-            {error !== '' &&
+            {error !== '' && (
                 <Notice>
-                    Time interval should not exceed 1 month to
-                    download CSV
+                    Time interval should not exceed 1 month to download CSV
                 </Notice>
-            }
+            )}
         </DateBox>
     )
 }

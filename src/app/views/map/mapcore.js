@@ -4,7 +4,11 @@ import MapView from "@arcgis/core/views/MapView";
 import Graphic from "@arcgis/core/Graphic";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import esriConfig from "@arcgis/core/config";
-// import TimeSlider from "@arcgis/core/widgets/TimeSlider";
+import TimeSlider from "@arcgis/core/widgets/TimeSlider";
+import Field from "@arcgis/core/layers/support/Field";
+import TimeInfo from "@arcgis/core/layers/support/TimeInfo";
+
+// let temp = {"LAT": 45.98938, "LON": -130.7382, "BaseTime": "2017-07-03 13:02:36"}
 
 const HYDROPHONES = [
     { location: 'Slope Base', latitude: 44.5153, longitude: -125.39 },
@@ -21,31 +25,20 @@ const noop = () => { };
 
 esriConfig.apiKey = "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8";
 
-// const layer = new FeatureLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/2015_processed/FeatureServer/0"
-// });
 
-// layer.renderer = {
-//     type: "simple",  // autocasts as new SimpleRenderer()
-//     symbol: {
-//         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-//         size: 5,
-//         color: [113, 15, 184],
-//         outline: {  // autocasts as new SimpleLineSymbol()
-//             width: 0.5,
-//             color: "white"
-//         }
-//     }
-// };
+const layer = new FeatureLayer({
+    url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_ship_ais/FeatureServer/0"
+});
 
+
+// ******* create timeslider ********
 export const webmap = new WebMap({
     portalItem: {
         id: "aa1d3f80270146208328cf66d022e09c",
     },
     basemap: "arcgis-oceans",
-    // layers: [layer]
+    layers: [layer]
 });
-
 
 export const view = new MapView({
     map: webmap,
@@ -53,6 +46,110 @@ export const view = new MapView({
     zoom: 8
 });
 
+// let polylineSymbol = {
+//     type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+//     color: [226, 119, 40]
+// };
+
+// let sourceGraphics = [];
+
+// for (let i = 0; i < 10; i++)
+// {
+//     let item = ShipData[i];
+
+//     let polyline = {
+//         type: "point",  // autocasts as new Point()
+//         longitude: item["LON"],
+//         latitude: item["LAT"]
+//     };
+
+//     let polylineAtt = {
+//         objectId: i,
+//         Name: "dot",
+//         // time: new Date(2020, 1, 1).getTime()  // year, month (0-based), day
+//         time: new Date(Date.parse(item["BaseTime"])).getTime()  // year, month (0-based), day
+//     };
+
+//     let polylineGraphic = new Graphic({
+//         geometry: polyline,
+//         symbol: polylineSymbol,
+//         attributes: polylineAtt,
+//     });
+//     sourceGraphics.push(polylineGraphic)
+// }
+
+
+// const layer = new FeatureLayer({
+//     apiKey: "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8",
+//     source: sourceGraphics,
+//     fields: [
+//         new Field( {
+//             name: "objectId",
+//             alias: "Object ID",
+//             type: "oid",
+//         }), new Field( {
+//             name: "name",
+//             alias: "Name",
+//             type: "string",
+//         }), new Field ({
+//             name: "time",
+//             alias: "Time",
+//             type: "date",
+//         })
+//     ],
+//     timeInfo: new TimeInfo({
+//         startField: "time",
+//         endField: "time",
+//         fullTimeExtent: {
+//             start: new Date(2014, 0, 1),
+//             end: new Date(2020, 11, 31)
+//         },
+//     })
+// });
+
+layer.renderer = {
+    type: "simple",  // autocasts as new SimpleRenderer()
+    symbol: {
+        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+        size: 2,
+        color: [113, 15, 184],
+        outline: {  // autocasts as new SimpleLineSymbol()
+            width: 0.1,
+            color: "white"
+        }
+    }
+};
+
+
+
+let timeSlider;
+TimeSlider.getPropertiesFromWebMap(webmap).then(
+    (timeSliderSettings) => {
+        const timeSliderDiv = document.createElement("div");
+        timeSliderDiv.id = "timeSliderDiv";
+        timeSliderDiv.style.width = "600px";
+        timeSlider = new TimeSlider({
+            ...timeSliderSettings, // imported settings from webmap
+            view: view,
+            container: timeSliderDiv,
+            fullTimeExtent: {
+                start: new Date(2015, 0, 1),
+                end: new Date(2020, 11, 31)
+            },
+        });
+        // view.whenLayerView(layer).then((lv) => {
+        //     // around up the full time extent to full hour
+        //     timeSlider.fullTimeExtent =
+        //     layer.timeInfo.fullTimeExtent.expandTo("hours");
+        // });
+        view.ui.add(timeSlider, "bottom-left");
+    }
+);
+
+
+// webmap.add(layer)
+
+// ********* from here, render the major components in map *********
 HYDROPHONES.forEach(element => {
     const measureThisAction = {
         title: "Get Info",
@@ -94,33 +191,6 @@ HYDROPHONES.forEach(element => {
     });
     view.graphics.add(pointGraphic);
 });
-
-// let timeSlider;
-// TimeSlider.getPropertiesFromWebMap(webmap).then(
-//     (timeSliderSettings) => {
-//         const timeSliderDiv = document.createElement("div");
-//         timeSliderDiv.id = "timeSliderDiv";
-//         timeSliderDiv.style.width = "600px";
-//         timeSlider = new TimeSlider({
-//             ...timeSliderSettings, // imported settings from webmap
-//             view: view,
-//             container: timeSliderDiv,
-//             fullTimeExtent: {
-//                 start: new Date(2015, 12, 31, 16),
-//                 end: new Date(2016, 1, 1, 10)
-//             },
-//         });
-//         view.whenLayerView(layer).then((lv) => {
-//             // around up the full time extent to full hour
-//             timeSlider.fullTimeExtent =
-//                 layer.timeInfo.fullTimeExtent.expandTo("hours");
-//             // timeSlider.stops = {
-//             //     interval: layer.timeInfo.interval
-//             // };
-//         });
-//         view.ui.add(timeSlider, "bottom-left");
-//     }
-// );
 
 export const initialize = (container, setCurrentLocation, handleOpenDialog) => {
     view.popup.on("trigger-action", (event) => {
