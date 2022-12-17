@@ -5,12 +5,6 @@ import Graphic from "@arcgis/core/Graphic";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import esriConfig from "@arcgis/core/config";
 import TimeSlider from "@arcgis/core/widgets/TimeSlider";
-import Field from "@arcgis/core/layers/support/Field";
-import TimeInfo from "@arcgis/core/layers/support/TimeInfo";
-import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
-// let temp = {"LAT": 45.98938, "LON": -130.7382, "BaseTime": "2017-07-03 13:02:36"}
-
-import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
 
 const HYDROPHONES = [
     { location: 'Slope Base', latitude: 44.5153, longitude: -125.39 },
@@ -27,32 +21,12 @@ const noop = () => { };
 
 esriConfig.apiKey = "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8";
 
-// https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer
-
-// let layer = new MapImageLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
-// });
-
-
-// const layer = new FeatureLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_column/FeatureServer/0",
-//     mode: "ondemand",
-//     timeOptions: {
-//         timeDataCumulative: false,
-//         timeOffset: 0,
-//         timeOffsetUnits: "esriTimeUnitsSeconds"
-//     }
-// });
-// const layer = new MapImageLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
-// })
-
-// const layer = new VectorTileLayer({
-//     url: "https://vectortileservices8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ship_location_extra_tile/VectorTileServer"
+// const AIS_extra_2015 = new FeatureLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ais_2015_new/FeatureServer/0"
 //   });
-// const layer = new VectorTileLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/extra_three_columnss/MapServer"
-//   });
+// const AIS_extra_2015 = new FeatureLayer({
+//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ais_extra_merge/FeatureServer/0",
+// });
 
 // ******* create timeslider ********
 export const webmap = new WebMap({
@@ -60,7 +34,8 @@ export const webmap = new WebMap({
         id: "aa1d3f80270146208328cf66d022e09c",
     },
     basemap: "arcgis-oceans",
-    // layers: [layer]
+    // layers: [AIS_extra_2015]
+    // layers: [AIS_extra_2015, AIS_extra_2016, AIS_extra_2017, AIS_extra_2018]
 });
 
 export const view = new MapView({
@@ -69,71 +44,8 @@ export const view = new MapView({
     zoom: 8
 });
 
-// let polylineSymbol = {
-//     type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-//     color: [226, 119, 40]
-// };
-
-// let sourceGraphics = [];
-
-// for (let i = 0; i < 10; i++)
-// {
-//     let item = ShipData[i];
-
-//     let polyline = {
-//         type: "point",  // autocasts as new Point()
-//         longitude: item["LON"],
-//         latitude: item["LAT"]
-//     };
-
-//     let polylineAtt = {
-//         objectId: i,
-//         Name: "dot",
-//         // time: new Date(2020, 1, 1).getTime()  // year, month (0-based), day
-//         time: new Date(Date.parse(item["BaseTime"])).getTime()  // year, month (0-based), day
-//     };
-
-//     let polylineGraphic = new Graphic({
-//         geometry: polyline,
-//         symbol: polylineSymbol,
-//         attributes: polylineAtt,
-//     });
-//     sourceGraphics.push(polylineGraphic)
-// }
-
-
-// const layer = new FeatureLayer({
-//     apiKey: "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8",
-//     source: sourceGraphics,
-//     fields: [
-//         new Field( {
-//             name: "objectId",
-//             alias: "Object ID",
-//             type: "oid",
-//         }), new Field( {
-//             name: "name",
-//             alias: "Name",
-//             type: "string",
-//         }), new Field ({
-//             name: "time",
-//             alias: "Time",
-//             type: "date",
-//         })
-//     ],
-//     timeInfo: new TimeInfo({
-//         startField: "time",
-//         endField: "time",
-//         fullTimeExtent: {
-//             start: new Date(2014, 0, 1),
-//             end: new Date(2020, 11, 31)
-//         },
-//     })
-// });
-
-
-
-
 // let timeSlider;
+
 // TimeSlider.getPropertiesFromWebMap(webmap).then(
 //     (timeSliderSettings) => {
 //         const timeSliderDiv = document.createElement("div");
@@ -144,25 +56,39 @@ export const view = new MapView({
 //             view: view,
 //             container: timeSliderDiv,
 //             fullTimeExtent: {
-//                 start: new Date(2015, 0, 1),
-//                 end: new Date(2020, 11, 31)
+//                 start: new Date(Date.UTC(2014, 0, 1)),
+//                 end: new Date(Date.UTC(2015, 0, 31))
 //             },
 //         });
-//         // view.whenLayerView(layer).then((lv) => {
-//         //     // around up the full time extent to full hour
-//         //     timeSlider.fullTimeExtent =
-//         //     layer.timeInfo.fullTimeExtent.expandTo("hours");
-//         // });
+//         view.whenLayerView(AIS_extra_2015).then((lv) => {
+//             // around up the full time extent to full hour
+//             timeSlider.fullTimeExtent =
+//             AIS_extra_2015.timeInfo.fullTimeExtent.expandTo("weeks");
+//         });
+
 //         view.ui.add(timeSlider, "bottom-left");
 //     }
 // );
 
-// layer.renderer = {
+// AIS_extra_2015.renderer = {
 //     type: "simple",  // autocasts as new SimpleRenderer()
 //     symbol: {
 //         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
 //         size: 2,
 //         color: [113, 15, 184],
+//         outline: {  // autocasts as new SimpleLineSymbol()
+//             width: 0.1,
+//             color: "white"
+//         }
+//     }
+// };
+
+// AIS_extra_2016.renderer = {
+//     type: "simple",  // autocasts as new SimpleRenderer()
+//     symbol: {
+//         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+//         size: 2,
+//         color: [80, 16, 184],
 //         outline: {  // autocasts as new SimpleLineSymbol()
 //             width: 0.1,
 //             color: "white"
@@ -214,6 +140,9 @@ HYDROPHONES.forEach(element => {
     });
     view.graphics.add(pointGraphic);
 });
+
+
+
 
 export const initialize = (container, setCurrentLocation, handleOpenDialog) => {
     view.popup.on("trigger-action", (event) => {

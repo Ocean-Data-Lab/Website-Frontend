@@ -11,28 +11,14 @@ const DateBox = styled(Box)(({ theme }) => ({
     position: 'relative',
 }))
 
-const Notice = styled(Box)(({ theme }) => ({
-    // color: '#696665',
-    color: 'red',
-    position: 'absolute',
-    width: '350px',
-    bottom: '1px',
-    fontSize: '12px',
-    [theme.breakpoints.down('md')]: {
-        bottom: '-2px',
-    },
-}))
-
 const { RangePicker } = DatePicker
 
 const DialogDatePicker = ({
     startDate,
     endDate,
-    setError,
     setStartDate,
     setEndDate,
     selectedValue,
-    error,
 }) => {
     const disabledDate = (current) => {
         if (selectedValue === 'CTD') {
@@ -56,15 +42,6 @@ const DialogDatePicker = ({
     }
 
     const handleCalendarChange = (dates, dateStrings, info) => {
-        if (dateStrings[1] !== '') {
-            const diff = dates[1].diff(dates[0], 'months')
-            if (diff >= 1) {
-                setError('error')
-            } else {
-                setError('')
-            }
-        }
-
         if (
             dateStrings[1] === '' ||
             (dateStrings[0] !== startDate && dateStrings[1] === endDate)
@@ -103,11 +80,6 @@ const DialogDatePicker = ({
                 disabledDate={disabledDate}
                 allowClear={false}
             />
-            {error !== '' && (
-                <Notice>
-                    Time interval should not exceed 1 month to download CSV
-                </Notice>
-            )}
         </DateBox>
     )
 }

@@ -2,7 +2,7 @@
     "name": "matx-react-pro",
     "version": "3.3.0",
     "private": true,
-    "proxy": "http://54.202.105.156/",
+    "proxy": "http://127.0.0.1:5000",
     "dependencies": {
         "@arcgis/core": "^4.24.7",
         "@auth0/auth0-spa-js": "^1.19.2",
@@ -20,6 +20,7 @@
         "autosuggest-highlight": "^3.2.0",
         "axios": "^0.24.0",
         "babel-polyfill": "^6.26.0",
+        "bokeh": "^1.0.3",
         "clsx": "^1.1.1",
         "cross-fetch": "^3.1.4",
         "date-fns": "^2.26.0",

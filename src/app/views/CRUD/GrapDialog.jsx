@@ -459,11 +459,9 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                 sx={{ height: '70px' }}
                             >
                                 <DialogDatePicker
-                                    error={error}
                                     startDate={startDate}
                                     endDate={endDate}
                                     graphType={graphType}
-                                    setError={setError}
                                     setStartDate={setStartDate}
                                     setEndDate={setEndDate}
                                     selectedValue={selectedValue}
