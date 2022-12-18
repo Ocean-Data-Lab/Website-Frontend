@@ -81,6 +81,7 @@ const DownloadCsv = ({
                         endDate +
                         '.csv'
                 )
+
                 document.body.appendChild(link)
                 link.click()
                 setLoading(false)

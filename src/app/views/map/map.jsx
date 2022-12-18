@@ -5,7 +5,8 @@ import React, {
     Fragment,
     useCallback,
 } from 'react'
-import GrapDialog from 'app/views/CRUD/GrapDialog'
+// import GrapDialog from 'app/views/CRUD/GrapDialog'
+import GraphDialog from 'app/views/CRUD/GraphDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { GET_INIT_GRAPH } from 'app/redux/actions/GraphActions.js'
 
@@ -58,7 +59,13 @@ export default function WebMap() {
             <StyledBox id="timeSlider"></StyledBox>
 
             {shouldOpenEditorDialog && (
-                <GrapDialog
+                // <GrapDialog
+                //     currentLocation={currentLocation}
+                //     graphData={graphList}
+                //     handleClose={handleDialogClose}
+                //     open={shouldOpenEditorDialog}
+                // />
+                <GraphDialog
                     currentLocation={currentLocation}
                     graphData={graphList}
                     handleClose={handleDialogClose}

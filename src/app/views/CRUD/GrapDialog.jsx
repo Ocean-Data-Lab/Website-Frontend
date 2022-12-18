@@ -775,8 +775,6 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                         : 'hideGraph'
                                 )}
                             ></Box>
-                            {/* <Box id="outer2" sx={{ width: '800px'}} className={clsx(selectedValue === "CTD" && ctdType === "Longterm" ? 'showGraph' : 'hideGraph')}></Box>
-                            <Box id="outer3" sx={{ width: '400px'}} className={clsx(selectedValue === "CTD" && ctdType === "Shortterm" ? 'showGraph' : 'hideGraph')}></Box> */}
                         </FlexBox>
                     </Grid>
                 </Grid>
