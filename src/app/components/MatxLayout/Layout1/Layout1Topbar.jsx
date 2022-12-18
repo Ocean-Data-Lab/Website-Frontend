@@ -3,9 +3,10 @@ import { themeShadows } from 'app/components/MatxTheme/themeColors'
 import { topBarHeight } from 'app/utils/constant'
 import Brand from '../../Brand/Brand'
 import React, { useState } from 'react'
-import { Drawer } from '@mui/material'
+import { Drawer, Button } from '@mui/material'
 import { H4, Paragraph } from 'app/components/Typography'
 import { Link } from 'react-router-dom'
+import VesselDataDownload from './VesselDown'
 
 const TopbarRoot = styled('div')(() => ({
     top: 0,
@@ -48,6 +49,7 @@ const ChunkBox = styled('div')(() => ({
 
 const InfoBox = styled(Box)(() => ({
     display: 'flex',
+    alignItems: 'center',
 }))
 const LabLogo = styled('img')(() => ({
     width: '50px',
@@ -59,13 +61,25 @@ const Options = styled(H4)(({ theme }) => ({
     margin: '15px',
     cursor: 'pointer',
 }))
+const ShipButton = styled(Button)(({ theme }) => ({
+    margin: '15px',
+    cursor: 'pointer',
+    color: '#656566',
+    fontSize: '14px',
+    borderRadius: '40px',
+    height: '44px',
+    border: '1px solid #656566',
+    '&:hover': {
+        background: '#f2f2f2',
+    },
+}))
 
-// d
 const Layout1Topbar = () => {
     const anchor = 'right'
     const [state, setState] = useState({
         right: false,
     })
+    const [shouldOpenEditorDialog, setShouldOpenEditorDialog] = useState(false)
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (
@@ -77,6 +91,15 @@ const Layout1Topbar = () => {
 
         setState({ ...state, [anchor]: open })
     }
+
+    const handleDialogClose = () => {
+        setShouldOpenEditorDialog(false)
+    }
+
+    const handleOpenWindow = () => {
+        setShouldOpenEditorDialog(true)
+    }
+
     return (
         <TopbarRoot>
             <TopbarContainer>
@@ -86,6 +109,10 @@ const Layout1Topbar = () => {
                     </Box>
                 </Link>
                 <InfoBox sx={{ p: 1 }}>
+                    <ShipButton onClick={handleOpenWindow}>
+                        Download Ship Data
+                    </ShipButton>
+
                     <Link to="/">
                         <Options>Map</Options>
                     </Link>
@@ -97,6 +124,7 @@ const Layout1Topbar = () => {
                         About
                     </Options>
                 </InfoBox>
+
                 <Drawer
                     anchor={anchor}
                     open={state[anchor]}
@@ -179,6 +207,12 @@ const Layout1Topbar = () => {
                     </ContentBox>
                 </Drawer>
             </TopbarContainer>
+
+            <VesselDataDownload
+                handleDialogClose={handleDialogClose}
+                shouldOpenEditorDialog={shouldOpenEditorDialog}
+                handleOpenWindow={handleOpenWindow}
+            />
         </TopbarRoot>
     )
 }

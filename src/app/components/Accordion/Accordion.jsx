@@ -4,7 +4,7 @@ import HelpIcon from '@mui/icons-material/Help'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
-import { Paragraph, H2 } from 'app/components/Typography'
+import { Paragraph } from 'app/components/Typography'
 import { Box, styled } from '@mui/system'
 const StyledAccordion = styled(Accordion)(() => ({
     '& .MuiAccordionSummary-content': {
@@ -31,8 +31,6 @@ const AccordionDescrip = ({ selectedValue, currType }) => {
     const handleAccordion = () => {
         Accordion.current.click()
     }
-
-    // console.log("currType", currType)
 
     return (
         <>

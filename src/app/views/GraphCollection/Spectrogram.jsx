@@ -73,7 +73,6 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
     const dispatch = useDispatch()
     const { initSpecGraph } = useSelector((state) => state.graph)
     const location = getApiLocation(currentLocation)
-    const [error, setError] = useState('')
 
     const handleUpdateGraph = () => {
         setLoading(true)
@@ -241,12 +240,6 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                         />
                     </Grid>
                 </Grid>
-            )}
-
-            {!specValid.includes(currentLocation) && (
-                <Box p={3}>
-                    This location doesn't have a low frequency hydrophone
-                </Box>
             )}
 
             <Grid container>

@@ -21,12 +21,9 @@ const noop = () => { };
 
 esriConfig.apiKey = "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8";
 
-// const AIS_extra_2015 = new FeatureLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ais_2015_new/FeatureServer/0"
-//   });
-// const AIS_extra_2015 = new FeatureLayer({
-//     url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ais_extra_merge/FeatureServer/0",
-// });
+const AIS_extra_2015 = new FeatureLayer({
+    url: "https://services8.arcgis.com/7yPK7vytRf49nyPG/arcgis/rest/services/ais_2015_day_1/FeatureServer/0"
+  });
 
 // ******* create timeslider ********
 export const webmap = new WebMap({
@@ -34,8 +31,7 @@ export const webmap = new WebMap({
         id: "aa1d3f80270146208328cf66d022e09c",
     },
     basemap: "arcgis-oceans",
-    // layers: [AIS_extra_2015]
-    // layers: [AIS_extra_2015, AIS_extra_2016, AIS_extra_2017, AIS_extra_2018]
+    layers: [AIS_extra_2015]
 });
 
 export const view = new MapView({
@@ -44,57 +40,18 @@ export const view = new MapView({
     zoom: 8
 });
 
-// let timeSlider;
-
-// TimeSlider.getPropertiesFromWebMap(webmap).then(
-//     (timeSliderSettings) => {
-//         const timeSliderDiv = document.createElement("div");
-//         timeSliderDiv.id = "timeSliderDiv";
-//         timeSliderDiv.style.width = "600px";
-//         timeSlider = new TimeSlider({
-//             ...timeSliderSettings, // imported settings from webmap
-//             view: view,
-//             container: timeSliderDiv,
-//             fullTimeExtent: {
-//                 start: new Date(Date.UTC(2014, 0, 1)),
-//                 end: new Date(Date.UTC(2015, 0, 31))
-//             },
-//         });
-//         view.whenLayerView(AIS_extra_2015).then((lv) => {
-//             // around up the full time extent to full hour
-//             timeSlider.fullTimeExtent =
-//             AIS_extra_2015.timeInfo.fullTimeExtent.expandTo("weeks");
-//         });
-
-//         view.ui.add(timeSlider, "bottom-left");
-//     }
-// );
-
-// AIS_extra_2015.renderer = {
-//     type: "simple",  // autocasts as new SimpleRenderer()
-//     symbol: {
-//         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-//         size: 2,
-//         color: [113, 15, 184],
-//         outline: {  // autocasts as new SimpleLineSymbol()
-//             width: 0.1,
-//             color: "white"
-//         }
-//     }
-// };
-
-// AIS_extra_2016.renderer = {
-//     type: "simple",  // autocasts as new SimpleRenderer()
-//     symbol: {
-//         type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
-//         size: 2,
-//         color: [80, 16, 184],
-//         outline: {  // autocasts as new SimpleLineSymbol()
-//             width: 0.1,
-//             color: "white"
-//         }
-//     }
-// };
+AIS_extra_2015.renderer = {
+    type: "simple",  // autocasts as new SimpleRenderer()
+    symbol: {
+        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+        size: 2,
+        color: [113, 15, 184],
+        outline: {  // autocasts as new SimpleLineSymbol()
+            width: 0.1,
+            color: "white"
+        }
+    }
+};
 
 // webmap.add(layer)
 
@@ -152,6 +109,67 @@ export const initialize = (container, setCurrentLocation, handleOpenDialog) => {
             handleOpenDialog(true, event.action.location)
         }
     });
+
+    let timeSlider;
+
+    TimeSlider.getPropertiesFromWebMap(webmap).then(
+        (timeSliderSettings) => {
+            const timeSliderDiv = document.createElement("div");
+            timeSliderDiv.id = "timeSliderDiv";
+            timeSliderDiv.style.width = "800px";
+            timeSlider = new TimeSlider({
+                ...timeSliderSettings, // imported settings from webmap
+                view: view,
+                    //     container: "timeSlider",
+                container: 'timeSlider',
+                fullTimeExtent: {
+                    start: new Date(Date.UTC(2015, 0, 1, 0)),
+                    end: new Date(Date.UTC(2015, 0, 1, 23))
+                },
+            });
+            view.whenLayerView(AIS_extra_2015).then((lv) => {
+                // around up the full time extent to full hour
+                timeSlider.fullTimeExtent =
+                AIS_extra_2015.timeInfo.fullTimeExtent.expandTo("hours");
+            });
+            // view.whenLayerView(AIS_extra_2015).then((lv) => {
+            //     timeSlider.timeExtent = {
+            //         start: new Date(Date.UTC(2015, 0, 1, 4)),
+            //         end: new Date(Date.UTC(2015, 0, 1, 6))
+            //     };
+
+            //     timeSlider.stops = {
+            //         interval: AIS_extra_2015.timeInfo.interval
+            //     };
+            // });
+            view.ui.add(timeSlider, "bottom-left");
+        }
+    );
+
+    // const timeSlider = new TimeSlider({
+    //     container: "timeSlider",
+    //     view: view,
+    //     timeVisible: true, // show the time stamps on the timeslider
+    //     // loop: true
+    // });
+
+
+    // view.whenLayerView(AIS_extra_2015).then((lv) => {
+    //     // around up the full time extent to full hour
+    //     timeSlider.fullTimeExtent = {
+    //         start: new Date(Date.UTC(2015, 0, 1, 0)),
+    //         end: new Date(Date.UTC(2015, 0, 1, 23))
+    //     };
+    //     timeSlider.timeExtent = {
+    //         start: new Date(Date.UTC(2015, 0, 1, 4)),
+    //         end: new Date(Date.UTC(2015, 0, 1, 6))
+    //     };
+
+    //     timeSlider.stops = {
+    //         interval: AIS_extra_2015.timeInfo.interval
+    //     };
+    // });
+
 
     view.container = container;
     view

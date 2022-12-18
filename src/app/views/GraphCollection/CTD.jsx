@@ -17,7 +17,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { getApiLocation } from '../../utils/utils'
 import AccordionDescrip from 'app/components/Accordion/Accordion'
-import { getUpdatedGraph } from 'app/redux/actions/GraphActions'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import DownloadCsv from 'app/components/Download/DownloadCsv'
 import DownloadPng from 'app/components/Download/DownloadPng'
@@ -91,15 +90,10 @@ const CTD = ({ currentLocation, selectedValue }) => {
     }
 
     useEffect(() => {
-        if (
-            Object.keys(initCtpGraph).length === 0 &&
-            Object.keys(initCtpGraphLine).length === 0
-        ) {
-            if (ctdValid.includes(currentLocation)) {
-                setLoading(true)
-                fetchCTPData()
-                fetchCTDLineData()
-            }
+        if (ctdValid.includes(currentLocation)) {
+            setLoading(true)
+            fetchCTPData()
+            fetchCTDLineData()
         }
     }, [currentLocation])
 
@@ -269,10 +263,6 @@ const CTD = ({ currentLocation, selectedValue }) => {
                     </Grid>
                 )}
             </Grid>
-
-            {!ctdValid.includes(currentLocation) && (
-                <Box p={3}>This location doesn't have CTD.</Box>
-            )}
 
             <Grid container>
                 <Grid item lg={12} md={12} sm={12} xs={12}>

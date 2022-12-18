@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, IconButton, Icon } from '@mui/material'
+import { IconButton, Icon } from '@mui/material'
 import { Box, styled, useTheme } from '@mui/system'
 import { convertHexToRGB } from 'app/utils/utils'
 import { Card, Grid } from '@mui/material'
@@ -50,6 +50,21 @@ const StyledH3 = styled('div')(() => ({
     lineHeight: '1.5',
 }))
 
+const ctdValid = [
+    'Oregon Offshore',
+    'Oregon Slope',
+    'Oregon Shelf',
+    'Axial Base',
+]
+
+const specValid = [
+    'Axial Base',
+    'Central Caldera',
+    'Eastern Caldera',
+    'Slope Base',
+    'Southern Hydrate',
+]
+
 const meteorologyValid = ['Oregon Offshore', 'Oregon Shelf']
 
 const GraphDialog = ({ currentLocation, open, handleClose }) => {
@@ -69,6 +84,7 @@ const GraphDialog = ({ currentLocation, open, handleClose }) => {
         inputProps: { 'aria-label': item },
     })
 
+    console.log('dd', currentLocation)
     return (
         <Backdrop open={open} sx={{ zIndex: 101 }}>
             <AnalyticsRoot
@@ -109,26 +125,41 @@ const GraphDialog = ({ currentLocation, open, handleClose }) => {
                         )}
                     </Grid>
 
-                    {selectedValue === 'Spec' && (
-                        <Spectrogram
-                            currentLocation={currentLocation}
-                            selectedValue={'Spec'}
-                        />
-                    )}
+                    {selectedValue === 'Spec' &&
+                        specValid.includes(currentLocation) && (
+                            <Spectrogram
+                                currentLocation={currentLocation}
+                                selectedValue={'Spec'}
+                            />
+                        )}
+                    {!specValid.includes(currentLocation) &&
+                        selectedValue === 'Spec' && (
+                            <Box p={3}>
+                                This location doesn't have a low frequency
+                                hydrophone
+                            </Box>
+                        )}
 
-                    {selectedValue === 'CTD' && (
-                        <CTD
-                            currentLocation={currentLocation}
-                            selectedValue={'CTD'}
-                        />
-                    )}
+                    {selectedValue === 'CTD' &&
+                        ctdValid.includes(currentLocation) && (
+                            <CTD
+                                currentLocation={currentLocation}
+                                selectedValue={'CTD'}
+                            />
+                        )}
 
-                    {selectedValue === 'Mete' && (
-                        <MeteGraph
-                            currentLocation={currentLocation}
-                            selectedValue={'Mete'}
-                        />
-                    )}
+                    {!ctdValid.includes(currentLocation) &&
+                        selectedValue === 'CTD' && (
+                            <Box p={3}>This location doesn't have CTD.</Box>
+                        )}
+
+                    {selectedValue === 'Mete' &&
+                        meteorologyValid.includes(currentLocation) && (
+                            <MeteGraph
+                                currentLocation={currentLocation}
+                                selectedValue={'Mete'}
+                            />
+                        )}
                 </Grid>
             </AnalyticsRoot>
         </Backdrop>

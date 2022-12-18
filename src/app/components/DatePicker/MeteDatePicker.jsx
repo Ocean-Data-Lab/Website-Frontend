@@ -15,11 +15,12 @@ const { RangePicker } = DatePicker
 
 const MeteDatePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
     const disabledDate = (current) => {
-        return (
-            current &&
-            (current < moment.utc([2020, 1, 1]) ||
-                current > moment.utc([2022, 11, 31]))
-        )
+        // Parse the start and end dates into moment objects
+        const start = moment('2015-05-01T00:00:00.000Z')
+        const end = moment('2022-10-25T12:00:00.000Z')
+
+        // Check if the current date is before the start date or after the end date
+        return current && (current.isBefore(start) || current.isAfter(end))
     }
 
     const handleCalendarChange = (dates, dateStrings, info) => {

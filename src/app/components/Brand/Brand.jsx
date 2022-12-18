@@ -22,8 +22,8 @@ const LabLogo = styled('img')(() => ({
 
 const Labtitle = styled(H4)(() => ({
     width: '160px',
-    color: '#0743a6',
-    fontWeight: 500,
+    color: '#107EBC',
+    fontWeight: 400,
     fontSize: '15px',
     marginLeft: '-5px',
 }))

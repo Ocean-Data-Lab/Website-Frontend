@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, Button } from '@mui/material'
-import SpecDatePicker from 'app/components/DatePicker/SpecDatePicker'
+import MeteDatePicker from 'app/components/DatePicker/MeteDatePicker'
 import { Box, styled } from '@mui/system'
 import {
     MenuItem,
@@ -13,7 +13,6 @@ import { getWindRainGraph } from 'app/redux/actions/GraphActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getApiLocation } from '../../utils/utils'
 import AccordionDescrip from 'app/components/Accordion/Accordion'
-import { getUpdatedGraph } from 'app/redux/actions/GraphActions'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import DownloadCsv from 'app/components/Download/DownloadCsv'
 import DownloadPng from 'app/components/Download/DownloadPng'
@@ -105,27 +104,22 @@ const MeteGraph = ({ currentLocation, selectedValue }) => {
     }
 
     useEffect(() => {
-        if (Object.keys(initWindRainGraph).length === 0) {
-            setMeteGrahphType('WindSpeed')
-            setLoading(true)
-            fetchWindRainData()
-        }
+        setMeteGrahphType('WindSpeed')
+        setLoading(true)
+        fetchWindRainData()
     }, [currentLocation])
 
     useEffect(() => {
-        if (Object.keys(initWindRainGraph).length !== 0) {
-            const outer = document.getElementById('outer4')
-
-            const el = document.createElement('div')
-            el.setAttribute('id', 'graphBox4')
-            outer.appendChild(el)
-            window.Bokeh.embed.embed_item(initWindRainGraph, 'graphBox4')
-            setLoading(false)
-            return () => {
-                if (document.getElementById('graphBox4')) {
-                    const h1 = document.getElementById('graphBox4')
-                    h1.remove()
-                }
+        const outer = document.getElementById('outer4')
+        const el = document.createElement('div')
+        el.setAttribute('id', 'graphBox4')
+        outer.appendChild(el)
+        window.Bokeh.embed.embed_item(initWindRainGraph, 'graphBox4')
+        setLoading(false)
+        return () => {
+            if (document.getElementById('graphBox4')) {
+                const h1 = document.getElementById('graphBox4')
+                h1.remove()
             }
         }
     }, [initWindRainGraph])
@@ -143,7 +137,7 @@ const MeteGraph = ({ currentLocation, selectedValue }) => {
                 pt={0}
                 sx={{ height: '70px' }}
             >
-                <SpecDatePicker
+                <MeteDatePicker
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}

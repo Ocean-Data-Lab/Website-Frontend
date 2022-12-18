@@ -19,6 +19,14 @@ const StyledBox = styled(Box)(() => ({
     width: '100%',
 }))
 
+const TimeSliderBox = styled('div')(() => ({
+    position: 'absolute',
+    width: '700px',
+    left: '5%',
+    right: '5%',
+    bottom: '20px',
+}))
+
 export default function WebMap() {
     const elementRef = useRef()
     const { graphList = [] } = useSelector((state) => state.graph)
@@ -56,15 +64,9 @@ export default function WebMap() {
     return (
         <>
             <StyledBox className="viewDiv" ref={elementRef}></StyledBox>
-            <StyledBox id="timeSlider"></StyledBox>
+            <TimeSliderBox id="timeSlider"></TimeSliderBox>
 
             {shouldOpenEditorDialog && (
-                // <GrapDialog
-                //     currentLocation={currentLocation}
-                //     graphData={graphList}
-                //     handleClose={handleDialogClose}
-                //     open={shouldOpenEditorDialog}
-                // />
                 <GraphDialog
                     currentLocation={currentLocation}
                     graphData={graphList}
