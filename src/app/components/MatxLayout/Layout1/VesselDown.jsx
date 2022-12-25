@@ -2,7 +2,7 @@ import { Box, styled } from '@mui/system'
 import { IconButton, Icon } from '@mui/material'
 import Backdrop from '@mui/material/Backdrop'
 import { convertHexToRGB } from 'app/utils/utils'
-import { Card, Grid, Button } from '@mui/material'
+import { Card, Grid, Button, CircularProgress } from '@mui/material'
 import { DatePicker } from 'antd'
 import * as moment from 'moment'
 import React, { useState } from 'react'
@@ -69,9 +69,10 @@ const FlexBox = styled(Box)(({ theme }) => ({
 const { RangePicker } = DatePicker
 
 const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
-    const [startDate, setStartDate] = useState('2020-01-01')
-    const [endDate, setEndDate] = useState('2020-02-02')
+    const [startDate, setStartDate] = useState('2021-01-01')
+    const [endDate, setEndDate] = useState('2021-01-02')
 
+    const [loading, setLoading] = useState(false)
     const disabledDate = (current) => {
         return (
             current &&
@@ -113,29 +114,43 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
     }
 
     async function downloadZip() {
+        setLoading(true)
         let dataList = generateDateList(startDate, endDate)
         let lst = generateUrlList(dataList)
 
         const zip = new JSZip()
 
         for (const url of lst) {
-            // for (const fileName of dataList) {
-            // const year = fileName.split('-')[0]
             const response = await fetch(url)
             const file = await response.blob()
             const fileName = url.split('/').pop()
-            zip.folder('ship_2022').file(fileName, file)
+            zip.folder(`${startDate + '_' + endDate}`).file(fileName, file)
         }
         // Generate the zip file
         const zipFile = await zip.generateAsync({ type: 'blob' })
         // Save the zip file to the user's device
-        saveAs(zipFile, 'ship_2022.zip')
+        saveAs(zipFile, `${startDate + '_' + endDate}.zip`)
+        setLoading(false)
     }
 
     const handleCalendarChange = (dates, dateStrings, info) => {
-        // Set start date
-        setStartDate(dateStrings[0])
-        setEndDate(dateStrings[1])
+        if (
+            dateStrings[1] === '' ||
+            (dateStrings[0] !== startDate && dateStrings[1] === endDate)
+        ) {
+            const futureMonth = moment(dateStrings[0]).add(1, 'M')
+            const next = moment(futureMonth._d)
+
+            setStartDate(dateStrings[0])
+            setEndDate(next.format('YYYY-MM-DD'))
+        } else {
+            setStartDate(dateStrings[0])
+
+            const futureMonth = moment(dateStrings[1])
+            const next = moment(futureMonth._d)
+            setEndDate(next.format('YYYY-MM-DD'))
+            // setEndDate(dateStrings[1])
+        }
     }
 
     return (
@@ -143,7 +158,7 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
             <AnalyticsRoot
                 sx={{
                     width: '45%',
-                    height: '30%',
+                    height: '37%',
                     overflow: 'scroll',
                 }}
             >
@@ -169,6 +184,7 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
                         <Box style={{ marginRight: '10px' }}>Time Range</Box>
                         <RangePicker
                             size="large"
+                            // disabled={selectedValue === 'Spec' ? [false, false] : [true, true]}
                             showTime={{
                                 hideDisabledOptions: true,
                             }}
@@ -194,6 +210,25 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
                     >
                         Note: Download data can take a while, please be patient
                     </Grid>
+
+                    {loading && (
+                        <Grid
+                            item
+                            lg={12}
+                            md={12}
+                            sm={12}
+                            xs={12}
+                            alignItems="center"
+                            justifyContent="center"
+                            textAlign="center"
+                            mb="20px"
+                        >
+                            <CircularProgress
+                                size={24}
+                                style={{ color: '#22a6c7', marginTop: '10px' }}
+                            />
+                        </Grid>
+                    )}
                 </Grid>
             </AnalyticsRoot>
         </Backdrop>
