@@ -96,8 +96,8 @@ const DownloadPng = ({
     return (
         <StyledButton
             variant="contained"
-            // disabled={loading === true}
-            disabled={true}
+            disabled={loading === true}
+            // disabled={true}
             onClick={DownloadPNG}
         >
             <DownloadIcon sx={{ mr: 1 }} />

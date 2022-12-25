@@ -29,9 +29,9 @@ const SpecDatePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
         // If first item in dateStrings is different from startDate
         if (dateStrings[0] !== startDate) {
             // Add 1 month to end date
-            const futureMonth = moment(dateStrings[1]).add(1, 'M')
+            const futureMonth = moment(dateStrings[1]).add(1, 'M').add(24, 'H')
             // Set end date
-            setEndDate(futureMonth.format('YYYY-MM-DD'))
+            setEndDate(futureMonth.format('YYYY-MM-DD HH'))
         }
         // If second item in dateStrings is different from endDate
         else if (dateStrings[1] !== endDate) {
@@ -49,7 +49,7 @@ const SpecDatePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
                 }}
                 defaultValue={[moment(startDate), moment(endDate)]}
                 value={[moment(startDate), moment(endDate)]}
-                format={'YYYY-MM-DD'}
+                format={'YYYY-MM-DD HH'}
                 onCalendarChange={handleCalendarChange}
                 disabledDate={disabledDate}
                 allowClear={false}
