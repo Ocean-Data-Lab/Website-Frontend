@@ -46,11 +46,15 @@ const DownloadCsv = ({
     const downloadCSV = () => {
         setLoading(true)
 
-        if (location === 'oregon_shelf' || location === 'oregon_offshore') {
+        if (
+            (meteGrahphType === 'WindSpeed' || meteGrahphType === 'RainRate') &&
+            (location === 'oregon_shelf' || location === 'oregon_offshore')
+        ) {
             startDate = processDateForWindRain(startDate)
             endDate = processDateForWindRain(endDate)
         }
 
+        console.log('meteGrahphType', meteGrahphType)
         axios
             .post(
                 '/api/downloads',
@@ -66,6 +70,7 @@ const DownloadCsv = ({
                 { responseType: 'blob' }
             )
             .then((res) => {
+                console.log('res data', res.data)
                 const url = window.URL.createObjectURL(new Blob([res.data]))
                 const link = document.createElement('a')
                 link.href = url

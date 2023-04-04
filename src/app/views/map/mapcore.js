@@ -98,63 +98,17 @@ HYDROPHONES.forEach(element => {
     view.graphics.add(pointGraphic);
 });
 
-// const Edge = [{ location: 'br', latitude: 47.75, longitude: -128.0 },
-// { location: 'br', latitude:43.92, longitude:-128.0 },
-// { location: 'br', latitude:47.75, longitude:-131.75 },
-// { location: 'br', latitude:43.92, longitude:-131.75 },
-// ]
-// Edge.forEach(element => {
-//     const measureThisAction = {
-//         title: "Explore Data",
-//         id: "show_popup",
-//         location: element.location
-//     };
-
-//     const point = {
-//         type: "point",
-//         longitude: element["longitude"],
-//         latitude: element["latitude"]
-//     };
-//     const simpleMarkerSymbol = {
-//         type: "simple-marker",
-//         color: [6, 94, 62],  // Orange
-//         outline: {
-//             color: [255, 255, 255], // White
-//             width: 1
-//         }
-//     };
-
-//     const popupTemplate = {
-//         title: "{Name}",
-//         content: "<div>Latitude: {Lat}, Longitude: {Lon}</div>",
-//         actions: [measureThisAction]
-//     }
-//     const attributes = {
-//         Name: element.location,
-//         Lat: element.latitude,
-//         Lon: element.longitude,
-//         Description: "I am a hydrophone"
-//     }
-
-//     const pointGraphic = new Graphic({
-//         geometry: point,
-//         symbol: simpleMarkerSymbol,
-//         attributes: attributes,
-//         popupTemplate: popupTemplate
-//     });
-//     view.graphics.add(pointGraphic);
-// });
-
 
 const polygon = {
     type: "polygon",
     rings: [
-        [-131.75, 47.75],
-        [-128.0, 47.75],
-        [-128.0, 43.92],
-        [-131.75, 43.92],
+        [-132.79, 47.750],
+        [-127, 47.750],
+        [-127, 43.93],
+        [-132.79, 43.93],
     ]
 };
+
 
 const simpleFillSymbol = {
     type: "simple-fill",
@@ -173,64 +127,14 @@ const polygonGraphic = new Graphic({
 view.graphics.add(polygonGraphic);
 
 
-// const Edge2 = [
-//     { location: 'br', latitude: 46.37, longitude: -127.17 },
-//     { location: 'br', latitude: 42.57, longitude: -127.17 },
-//     { location: 'br', latitude: 42.57, longitude: -122.5 },
-//     { location: 'br', latitude: 46.44, longitude: -122.5 },
-// ]
-
-// Edge2.forEach(element => {
-//     const measureThisAction = {
-//         title: "Explore Data",
-//         id: "show_popup",
-//         location: element.location
-//     };
-
-//     const point = {
-//         type: "point",
-//         longitude: element["longitude"],
-//         latitude: element["latitude"]
-//     };
-//     const simpleMarkerSymbol = {
-//         type: "simple-marker",
-//         color: [212, 15, 94],  // Orange
-//         outline: {
-//             color: [255, 255, 255], // White
-//             width: 1
-//         }
-//     };
-
-//     const popupTemplate = {
-//         title: "{Name}",
-//         content: "<div>Latitude: {Lat}, Longitude: {Lon}</div>",
-//         actions: [measureThisAction]
-//     }
-//     const attributes = {
-//         Name: element.location,
-//         Lat: element.latitude,
-//         Lon: element.longitude,
-//         Description: "I am a hydrophone"
-//     }
-
-//     const pointGraphic = new Graphic({
-//         geometry: point,
-//         symbol: simpleMarkerSymbol,
-//         attributes: attributes,
-//         popupTemplate: popupTemplate
-//     });
-//     view.graphics.add(pointGraphic);
-// });
-
-
 
 const polygon2 = {
     type: "polygon",
     rings: [
-        [-127.17, 46.37],
-        [-122.5, 46.44],
-        [-122.5, 42.57],
-        [-127.17, 42.57],
+        [-128, 46.37],
+        [-122, 46.44],
+        [-122, 42.57],
+        [-128, 42.57],
     ]
 };
 

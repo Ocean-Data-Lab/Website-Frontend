@@ -53,12 +53,13 @@ const ChartHeader = styled(Box)(({ theme }) => ({
 const StyledButton = styled(Button)(({ theme }) => ({
     width: '100px',
     marginLeft: '10px',
-    backgroundColor: '#008255',
+    backgroundColor: '#d1d1d1',
+    // backgroundColor: '#008255',
     [theme.breakpoints.down('sm')]: {
         fontSize: '12px',
     },
     '&:hover': {
-        backgroundColor: '#095435',
+        // backgroundColor: '#095435',
     },
 }))
 const FlexBox = styled(Box)(({ theme }) => ({
@@ -69,15 +70,16 @@ const FlexBox = styled(Box)(({ theme }) => ({
 const { RangePicker } = DatePicker
 
 const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
-    const [startDate, setStartDate] = useState('2021-01-01')
-    const [endDate, setEndDate] = useState('2021-01-02')
+    const [startDate, setStartDate] = useState('2022-01-01')
+    const [endDate, setEndDate] = useState('2022-02-01')
 
     const [loading, setLoading] = useState(false)
+
     const disabledDate = (current) => {
         return (
             current &&
-            (current < moment.utc([2015, 0, 14]) ||
-                current > moment.utc([2023, 11, 31]))
+            (current < moment.utc([2015, 0, 1]) ||
+                current > moment.utc([2022, 5, 30]))
         )
     }
 
@@ -109,7 +111,7 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
     function generateUrlList(dateList) {
         return dateList.map((date) => {
             const [year, month, day] = date.split('-')
-            return `https://storage.googleapis.com/shiplocationdata/ship_${year}/${year}_${month}_${day}.csv.zip`
+            return `https://storage.googleapis.com/shiplocationdata/${year}/${year}_${month}_${day}.csv`
         })
     }
 
@@ -158,7 +160,7 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
             <AnalyticsRoot
                 sx={{
                     width: '45%',
-                    height: '37%',
+                    height: '30%',
                     overflow: 'scroll',
                 }}
             >
@@ -195,7 +197,7 @@ const VesselDataDownload = ({ handleDialogClose, shouldOpenEditorDialog }) => {
                             disabledDate={disabledDate}
                             allowClear={false}
                         />
-                        <StyledButton onClick={downloadZip}>
+                        <StyledButton onClick={downloadZip} disabled>
                             Download
                         </StyledButton>
                     </FlexBox>
