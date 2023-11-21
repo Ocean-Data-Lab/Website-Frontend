@@ -109,9 +109,9 @@ const Layout1Topbar = () => {
                     </Box>
                 </Link>
                 <InfoBox sx={{ p: 1 }}>
-                    <ShipButton onClick={handleOpenWindow}>
+                    {/* <ShipButton onClick={handleOpenWindow}>
                         Download Ship Data
-                    </ShipButton>
+                    </ShipButton> */}
 
                     <Link to="/">
                         <Options>Map</Options>

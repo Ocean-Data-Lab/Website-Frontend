@@ -8,6 +8,7 @@ import Radio from '@mui/material/Radio'
 import Spectrogram from '../GraphCollection/Spectrogram'
 import CTD from '../GraphCollection/CTD'
 import MeteGraph from '../GraphCollection/MeteGraph'
+import Broadband from '../GraphCollection/Broadband'
 
 const ChartHeader = styled(Box)(({ theme }) => ({
     position: 'fixed',
@@ -65,6 +66,24 @@ const specValid = [
     'Southern Hydrate',
 ]
 
+const broadValid = [
+    'Oregon Shelf',
+    'Oregon Slope',
+    'Slope Base',
+    'Axial Base',
+    'Oregon Offshore'
+]
+
+const obsValid = [
+    'Axial Base',
+    'Slope Base',
+    'Eastern Caldera',
+    'Central Caldera',
+    'Axial Ashes',
+    'Axial International',
+    'Hydrate Summit'
+]
+
 const meteorologyValid = ['Oregon Offshore', 'Oregon Shelf']
 
 const GraphDialog = ({ currentLocation, open, handleClose }) => {
@@ -115,8 +134,10 @@ const GraphDialog = ({ currentLocation, open, handleClose }) => {
                     }}
                 >
                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <Radio {...controlProps('Spec')} /> Hydrophone Data
+                        <Radio {...controlProps('Spec')} /> Low Frequency Hydrophone Data
                         <Radio {...controlProps('CTD')} /> CTD Data
+                        <Radio {...controlProps('Broad')} /> Broadband Hydrophone Data
+                        <Radio {...controlProps('OBS')} /> OBS Data
                         {meteorologyValid.includes(currentLocation) && (
                             <>
                                 <Radio {...controlProps('Mete')} /> Meteorology
@@ -136,6 +157,36 @@ const GraphDialog = ({ currentLocation, open, handleClose }) => {
                         selectedValue === 'Spec' && (
                             <Box p={3}>
                                 This location doesn't have a low frequency
+                                hydrophone
+                            </Box>
+                        )}
+
+                    {selectedValue === 'OBS' &&
+                        obsValid.includes(currentLocation) && (
+                            <Spectrogram
+                                currentLocation={currentLocation}
+                                selectedValue={'OBS'}
+                            />
+                        )}
+                    {!obsValid.includes(currentLocation) &&
+                        selectedValue === 'OBS' && (
+                            <Box p={3}>
+                                This location doesn't have an OBS
+                                hydrophone
+                            </Box>
+                        )}
+
+                    {selectedValue === 'Broad' &&
+                        broadValid.includes(currentLocation) && (
+                            <Broadband
+                                currentLocation={currentLocation}
+                                selectedValue={'Broad'}
+                            />
+                        )}
+                    {!broadValid.includes(currentLocation) &&
+                        selectedValue === 'Broad' && (
+                            <Box p={3}>
+                                This location doesn't have a broadband
                                 hydrophone
                             </Box>
                         )}

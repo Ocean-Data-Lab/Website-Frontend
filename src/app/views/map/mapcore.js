@@ -12,7 +12,7 @@ const HYDROPHONES = [
     { location: 'Southern Hydrate', latitude: 44.5691, longitude: -125.1479 },
     { location: 'Central Caldera', latitude: 45.9546, longitude: -130.0089 },
     { location: 'Eastern Caldera', latitude: 45.9396, longitude: -129.9738 },
-    { location: 'Oregon Slope', latitude: 44.529, longitude: -125.3893 },
+    // { location: 'Oregon Slope', latitude: 44.529, longitude: -125.3893 },
     { location: 'Oregon Offshore', latitude: 44.3695, longitude: -124.954 },
     { location: 'Oregon Shelf', latitude: 44.6371, longitude: -124.306 },
 ]
@@ -99,60 +99,60 @@ HYDROPHONES.forEach(element => {
 });
 
 
-const polygon = {
-    type: "polygon",
-    rings: [
-        [-132.79, 47.750],
-        [-127, 47.750],
-        [-127, 43.93],
-        [-132.79, 43.93],
-    ]
-};
+// const polygon = {
+//     type: "polygon",
+//     rings: [
+//         [-132.79, 47.750],
+//         [-127, 47.750],
+//         [-127, 43.93],
+//         [-132.79, 43.93],
+//     ]
+// };
 
 
-const simpleFillSymbol = {
-    type: "simple-fill",
-    color: [50,100,200,.15],
-    outline: {
-        color: [129, 9, 176],
-        width: 1
-    }
-};
+// const simpleFillSymbol = {
+//     type: "simple-fill",
+//     color: [50,100,200,.15],
+//     outline: {
+//         color: [129, 9, 176],
+//         width: 1
+//     }
+// };
 
-const polygonGraphic = new Graphic({
-    geometry: polygon,
-    symbol: simpleFillSymbol
-});
+// const polygonGraphic = new Graphic({
+//     geometry: polygon,
+//     symbol: simpleFillSymbol
+// });
 
-view.graphics.add(polygonGraphic);
+// view.graphics.add(polygonGraphic);
 
 
 
-const polygon2 = {
-    type: "polygon",
-    rings: [
-        [-128, 46.37],
-        [-122, 46.44],
-        [-122, 42.57],
-        [-128, 42.57],
-    ]
-};
+// const polygon2 = {
+//     type: "polygon",
+//     rings: [
+//         [-128, 46.37],
+//         [-122, 46.44],
+//         [-122, 42.57],
+//         [-128, 42.57],
+//     ]
+// };
 
-const simpleFillSymbol2 = {
-    type: "simple-fill",
-    color: [50,100,200,.15],
-    outline: {
-        color: [129, 9, 176],
-        width: 1
-    }
-};
+// const simpleFillSymbol2 = {
+//     type: "simple-fill",
+//     color: [50,100,200,.15],
+//     outline: {
+//         color: [129, 9, 176],
+//         width: 1
+//     }
+// };
 
-const polygonGraphic2 = new Graphic({
-    geometry: polygon2,
-    symbol: simpleFillSymbol2
-});
+// const polygonGraphic2 = new Graphic({
+//     geometry: polygon2,
+//     symbol: simpleFillSymbol2
+// });
 
-view.graphics.add(polygonGraphic2);
+// view.graphics.add(polygonGraphic2);
 
 
 

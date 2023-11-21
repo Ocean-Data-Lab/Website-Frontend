@@ -662,6 +662,8 @@ const GrapDialog = ({ currentLocation, open, handleClose }) => {
                                         />
                                     )}
 
+                                    
+
                                     {/* Download right image: display only when the the selected value is CTD */}
                                     {selectedValue === 'CTD' &&
                                         ctdType === 'Shortterm' && (

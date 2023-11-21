@@ -14,7 +14,6 @@ import { getInitialGraph } from 'app/redux/actions/GraphActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getApiLocation } from '../../utils/utils'
 import AccordionDescrip from 'app/components/Accordion/Accordion'
-import { getUpdatedGraph } from 'app/redux/actions/GraphActions'
 import { getSTUpdatedGraph } from 'app/redux/actions/GraphActions'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import DownloadCsv from 'app/components/Download/DownloadCsv'
@@ -55,51 +54,35 @@ const IMG = styled('img')(({ theme }) => ({
         width: '110%',
     },
 }))
-const specValid = [
-    'Axial Base',
-    'Central Caldera',
-    'Eastern Caldera',
+
+const broadValid = [
+    'Oregon Shelf',
+    'Oregon Slope',
     'Slope Base',
-    'Southern Hydrate',
+    'Axial Base',
+    'Oregon Offshore'
 ]
 
-const obsValid = [
-    'Axial Base',
+const doubleValid = [
+    'Oregon Slope',
     'Slope Base',
-    'Eastern Caldera',
-    'Central Caldera',
-    'Axial Ashes',
-    'Axial International',
-    'Hydrate Summit'
+    'Axial Base'
 ]
 
 const Spectrogram = ({ currentLocation, selectedValue }) => {
-    const [startDate, setStartDate] = useState('2020-01-01T00:00')
-    const [endDate, setEndDate] = useState('2020-02-01T01:00:00')
-    const [graphType, setGraphType] = useState('Spectrogram')
-    const [frequency, setFrequency] = useState(50)
-    const [avg_time, setAvgTime] = useState(3600)
-    const [nperseg, setNperseg] = useState(1024)
+    const [startDate, setStartDate] = useState('2021-09-01T00:00')
+    const [endDate, setEndDate] = useState('2021-09-01T00:05')
+    const [graphType, setGraphType] = useState('Broadband')
+    const [avg_time, setAvgTime] = useState(1)
+    const [nperseg, setNperseg] = useState(4096)
     const [overlap, setOverlap] = useState(50)
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState('')
-    const [currType, setCurrType] = useState('Spectrogram')
+    const [currType, setCurrType] = useState('Broadband')
     const [locType, setLocType] = useState('Seafloor')
     const dispatch = useDispatch()
     const { initSpecGraph } = useSelector((state) => state.graph)
     const location = getApiLocation(currentLocation)
-
-
-    const handleUpdateGraph = () => {
-        setLoading(true)
-        setCurrType(graphType)
-        if (selectedValue == 'OBS') {
-            setGraphType('OBS')
-        }
-        dispatch(
-            getUpdatedGraph(startDate, endDate, graphType, location, frequency)
-        )
-    }
 
     const handleSTUpdateGraph = () => {
         setLoading(true)
@@ -113,42 +96,24 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
         await dispatch(getInitialGraph(startDate, endDate, location))
     }
 
-    const handleTypeDropDown = (event) => {
-        setGraphType(event.target.value)
-    }
-
-    const checkFrequecy = () => {
-        if (frequency < 1 || frequency > 80) return true
-        return false
-    }
-
-    // const checkDates = () => {
-    //     if (Math.abs(Date.parse(endDate) - Date.parse(startDate))/(1000*3600) > 48) return true
-    //     return false
-    // }
-
     const checkAvgTime = () => {
         if (avg_time < 1 || avg_time > 3600) return true
         return false
     }
 
-    const checkRelValues = () => {
-        if (avg_time*200 <= nperseg) return true
-        return false
-    }
+    // const checkRelValues = () => {
+    //     if (avg_time*64000 <= nperseg) return true
+    //     return false
+    // }
 
-    const checkNperseg = () => {
-        if (nperseg < 1 || nperseg > 1024) return true
-        return false
-    }
+    // const checkNperseg = () => {
+    //     if (nperseg < 1 || nperseg > 4096) return true
+    //     return false
+    // }
 
     const checkOverlap = () => {
         if (overlap < 1 || overlap > 100) return true
         return false
-    }
-
-    const handleFrequencyChange = (event) => {
-        setFrequency(event.target.value)
     }
 
     const handleAvgTimeChange = (event) => {
@@ -163,12 +128,16 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
         setOverlap(event.target.value)
     }
 
+    const handleTypeDropDown = (event) => {
+        setLocType(event.target.value)
+    }
+
     useEffect(() => {
-        if (specValid.includes(currentLocation)) fetchSpecData()
+        if (broadValid.includes(currentLocation)) fetchSpecData()
     }, [currentLocation])
 
     useEffect(() => {
-        if (currType === 'Spectrogram' || currType === 'OBS' || currType === 'Octave Band' || currType === 'ST Spectrogram') {
+        if (currType === 'Broadband') {
             if (Object.keys(initSpecGraph).length !== 0) {
                 setLoading(false)
                 const outer = document.getElementById('outer')
@@ -183,17 +152,12 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                     }
                 }
             }
-        } else if (currType === 'SPDF') {
-            setLoading(false)
-            let imageResult = initSpecGraph['image']
-            let image64 = imageResult.split("'")[1]
-            setImage(image64)
         }
     }, [initSpecGraph])
 
     return (
         <>
-            {specValid.includes(currentLocation) && (
+            {broadValid.includes(currentLocation) && (
                 <Grid
                     item
                     lg={4}
@@ -218,61 +182,42 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                 </Grid>
             )}
 
-            {specValid.includes(currentLocation) && (
+            {doubleValid.includes(currentLocation) && (
                 <Grid item lg={3} md={3} sm={6} xs={12}>
                     <FormControl fullWidth sx={{ mb: 1, width: '100%' }}>
                         <InputLabel id="demo-simple-select-label">
-                            Type
+                            Hydrophone Depth
                         </InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={graphType}
+                            value={locType}
                             label="Type"
-                            defaultValue={'Spectrogram'}
+                            defaultValue={'Seafloor'}
                             onChange={handleTypeDropDown}
                         >
-                            <MenuItem value={'Spectrogram'}>
-                                Spectrogram
+                            <MenuItem value={'Seafloor'}>
+                                Seafloor
                             </MenuItem>
-                            <MenuItem value={'ST Spectrogram'}>
-                                Short Term Spectrogram
-                            </MenuItem>
-                            <MenuItem value={'SPDF'}>SPDF</MenuItem>
-                            <MenuItem value={'Octave Band'}>
-                                Octave Band
+                            <MenuItem value={'Shallow'}>
+                                Shallow
                             </MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
             )}
 
-            {specValid.includes(currentLocation) && (
+            {broadValid.includes(currentLocation) && (
                 <Grid item lg={3} md={3} sm={6} xs={12}>
                     <TextField
-                        error={checkFrequecy()}
+                        error={checkAvgTime()}
+                        // error={checkAvgTime() || checkRelValues()}
                         helperText={
-                            checkFrequecy() && 'Frequency not in valid range'
+                            (checkAvgTime() && 'Averaging Time not in valid range')
+                            // (checkAvgTime() && 'Averaging Time not in valid range') ||
+                            // (checkRelValues() && 'Avg Time x 64000 > nperseg not met')
                         }
-                        disabled={graphType === 'Octave Band' ? false : true}
-                        required
-                        value={frequency}
-                        id="outlined-required"
-                        label="Required frequency 1-90"
-                        onChange={handleFrequencyChange}
-                    />
-                </Grid>
-            )}
-
-            {specValid.includes(currentLocation) && (
-                <Grid item lg={3} md={3} sm={6} xs={12}>
-                    <TextField
-                        error={checkAvgTime() || checkRelValues()}
-                        helperText={
-                            (checkAvgTime() && 'Averaging Time not in valid range') ||
-                            (checkRelValues() && 'Avg Time x 200 > nperseg not met')
-                        }
-                        disabled={graphType === 'ST Spectrogram' ? false : true}
+                        disabled={graphType === 'Broadband' ? false : true}
                         required
                         value={avg_time}
                         id="outlined-required"
@@ -282,31 +227,31 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                 </Grid>
             )}
 
-            {specValid.includes(currentLocation) && (
+            {broadValid.includes(currentLocation) && (
                 <Grid item lg={3} md={3} sm={6} xs={12}>
                     <TextField
-                        error={checkNperseg()}
-                        helperText={
-                            checkNperseg() && 'Nperseg not in valid range'
-                        }
-                        disabled={graphType === 'ST Spectrogram' ? false : true}
+                        // error={checkNperseg()}
+                        // helperText={
+                        //     checkNperseg() && 'Nperseg not in valid range'
+                        // }
+                        disabled={graphType === 'Broadband' ? false : true}
                         required
                         value={nperseg}
                         id="outlined-required"
-                        label="Nperseg : 1-1024"
+                        label="N per segment for FFT"
                         onChange={handleNpersegChange}
                     />
                 </Grid>
             )}
 
-            {specValid.includes(currentLocation) && (
+            {broadValid.includes(currentLocation) && (
                 <Grid item lg={3} md={3} sm={6} xs={12}>
                     <TextField
                         error={checkOverlap()}
                         helperText={
                             checkOverlap() && 'Overlap not in valid range'
                         }
-                        disabled={graphType === 'ST Spectrogram' ? false : true}
+                        disabled={graphType === 'Broadband' ? false : true}
                         required
                         value={overlap}
                         id="outlined-required"
@@ -316,21 +261,21 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                 </Grid>
             )}
 
-            {specValid.includes(currentLocation) && (
+            {broadValid.includes(currentLocation) && (
                 <Grid container p={1} pt={3} pb={0}>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <ButtonBox>
                             <StyledButton
-                                disabled={checkFrequecy()}
+                                disabled={checkAvgTime()}
                                 variant="contained"
                                 component="span"
-                                onClick={graphType === "ST Spectrogram" ? handleSTUpdateGraph : handleUpdateGraph}
+                                onClick={handleSTUpdateGraph}
                             >
                                 <AutorenewIcon sx={{ mr: 1 }} />
                                 Update
                             </StyledButton>
 
-                            <DownloadCsv
+                            {/* <DownloadCsv
                                 loading={loading}
                                 startDate={startDate}
                                 endDate={endDate.substring(0, 10)}
@@ -351,14 +296,14 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                                 endDate={endDate}
                                 location={location}
                                 frequency={frequency}
-                                selectedValue={'Spec'}
+                                selectedValue={'Broad'}
                                 name={'PNG'}
                                 ctdType="left"
-                            />
+                            /> */}
                         </ButtonBox>
 
                         <AccordionDescrip
-                            selectedValue={'Spec'}
+                            selectedValue={'Broad'}
                             currType={currType}
                         />
                     </Grid>
@@ -384,13 +329,6 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                         />
                     </Grid>
                 )}
-                {currType === 'SPDF' && image !== '' && (
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                        <FlexBox>
-                            <IMG src={`data:image/jpg;base64,${image}`} />
-                        </FlexBox>
-                    </Grid>
-                )}
             </Grid>
 
             <Grid container>
@@ -400,6 +338,7 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
                     </FlexBox>
                 </Grid>
             </Grid>
+
         </>
     )
 }

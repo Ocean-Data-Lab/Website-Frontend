@@ -1,5 +1,5 @@
 import {
-    GET_INIT_GRAPH, GET_UPDATE_GRAPH, GET_CTP_INIT_GRAPH, GET_UPDATE_CTD_GRAPH, GET_CTP_INIT_GRAPH_LINE, GET_WIND_RAIN_GRAPH
+    GET_INIT_GRAPH, GET_UPDATE_GRAPH, GET_UPDATE_ST_GRAPH, GET_CTP_INIT_GRAPH, GET_UPDATE_CTD_GRAPH, GET_CTP_INIT_GRAPH_LINE, GET_WIND_RAIN_GRAPH
 } from '../actions/GraphActions'
 
 const initialState = {
@@ -32,6 +32,12 @@ const GraphReducer = function (state = initialState, action) {
             }
         }
         case GET_UPDATE_GRAPH: {
+            return {
+                ...state,
+                initSpecGraph: { ...action.payload }
+            }
+        }
+        case GET_UPDATE_ST_GRAPH: {
             return {
                 ...state,
                 initSpecGraph: { ...action.payload }
