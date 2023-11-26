@@ -81,7 +81,7 @@ const obsValid = [
     'Central Caldera',
     'Axial Ashes',
     'Axial International',
-    'Hydrate Summit'
+    'Southern Hydrate'
 ]
 
 const meteorologyValid = ['Oregon Offshore', 'Oregon Shelf']

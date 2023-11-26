@@ -104,6 +104,12 @@ const AccordionDescrip = ({ selectedValue, currType }) => {
                         </Paragraph>
                     )}
 
+                    {selectedValue === 'Spec' && currType === 'OBS' && (
+                        <Paragraph sx={{ color: '#696665' }}>
+                            OBS Data DESCRIPTION
+                        </Paragraph>
+                    )}
+
                     {selectedValue === 'Spec' && currType === 'SPDF' && (
                         <Paragraph sx={{ color: '#696665' }}>
                             SPDFs are calculated from the long-term spectrograms

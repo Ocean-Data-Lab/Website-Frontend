@@ -61,6 +61,8 @@ const specValid = [
     'Eastern Caldera',
     'Slope Base',
     'Southern Hydrate',
+    'Axial Ashes',
+    'Axial International',
 ]
 
 const obsValid = [
@@ -70,7 +72,7 @@ const obsValid = [
     'Central Caldera',
     'Axial Ashes',
     'Axial International',
-    'Hydrate Summit'
+    'Southern Hydrate',
 ]
 
 const Spectrogram = ({ currentLocation, selectedValue }) => {
@@ -95,6 +97,7 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
         setCurrType(graphType)
         if (selectedValue == 'OBS') {
             setGraphType('OBS')
+            setCurrType('OBS')
         }
         dispatch(
             getUpdatedGraph(startDate, endDate, graphType, location, frequency)

@@ -17,6 +17,11 @@ const HYDROPHONES = [
     { location: 'Oregon Shelf', latitude: 44.6371, longitude: -124.306 },
 ]
 
+const OBS_HYDROPHONES = [
+    { location: 'Axial Ashes', latitude: 45.933559, longitude: -129.999207 },
+    { location: 'Axial International', latitude: 45.925732, longitude: -129.977997 },
+]
+
 const noop = () => { };
 
 esriConfig.apiKey = "AAPK460c081ffc584c5090c2b383ede3366b1JA6FLMBYno7qMVVlHo12K6EOAtFnfYV_6UQH2_bUGzYM0qQIBxyfrSfrVF8mJM8";
@@ -98,7 +103,47 @@ HYDROPHONES.forEach(element => {
     view.graphics.add(pointGraphic);
 });
 
+OBS_HYDROPHONES.forEach(element => {
+    const measureThisAction = {
+        title: "Explore Data",
+        id: "show_popup",
+        location: element.location
+    };
 
+    const point = {
+        type: "point",
+        longitude: element["longitude"],
+        latitude: element["latitude"]
+    };
+    const simpleMarkerSymbol = {
+        type: "simple-marker",
+        color: [105, 204, 164],  // Green
+        outline: {
+            color: [255, 255, 255], // White
+            width: 1
+        }
+    };
+
+    const popupTemplate = {
+        title: "{Name}",
+        content: "<div>Latitude: {Lat}, Longitude: {Lon}</div>",
+        actions: [measureThisAction]
+    }
+    const attributes = {
+        Name: element.location,
+        Lat: element.latitude,
+        Lon: element.longitude,
+        Description: "I am a hydrophone"
+    }
+
+    const pointGraphic = new Graphic({
+        geometry: point,
+        symbol: simpleMarkerSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate
+    });
+    view.graphics.add(pointGraphic);
+});
 // const polygon = {
 //     type: "polygon",
 //     rings: [
