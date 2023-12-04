@@ -7,19 +7,16 @@ import esriConfig from "@arcgis/core/config";
 import TimeSlider from "@arcgis/core/widgets/TimeSlider";
 
 const HYDROPHONES = [
-    { location: 'Slope Base', latitude: 44.5153, longitude: -125.39 },
-    { location: 'Axial Base', latitude: 45.8168, longitude: -129.754 },
-    { location: 'Southern Hydrate', latitude: 44.5691, longitude: -125.1479 },
-    { location: 'Central Caldera', latitude: 45.9546, longitude: -130.0089 },
-    { location: 'Eastern Caldera', latitude: 45.9396, longitude: -129.9738 },
+    { location: 'Slope Base', latitude: 44.5153, longitude: -125.39, products: ['OBS, Low Frequency & Broadband Hydrophones']},
+    { location: 'Axial Base', latitude: 45.8168, longitude: -129.754, products: ['CTD, OBS, Low Frequency & Broadband Hydrophones']},
+    { location: 'Southern Hydrate', latitude: 44.5691, longitude: -125.1479, products: ['OBS, Low Frequency Hydrophones']},
+    { location: 'Central Caldera', latitude: 45.9546, longitude: -130.0089, products: ['OBS, Low Frequency Hydrophones'] },
+    { location: 'Eastern Caldera', latitude: 45.9396, longitude: -129.9738, products: ['OBS, Low Frequency Hydrophones'] },
     // { location: 'Oregon Slope', latitude: 44.529, longitude: -125.3893 },
-    { location: 'Oregon Offshore', latitude: 44.3695, longitude: -124.954 },
-    { location: 'Oregon Shelf', latitude: 44.6371, longitude: -124.306 },
-]
-
-const OBS_HYDROPHONES = [
-    { location: 'Axial Ashes', latitude: 45.933559, longitude: -129.999207 },
-    { location: 'Axial International', latitude: 45.925732, longitude: -129.977997 },
+    { location: 'Oregon Offshore', latitude: 44.3695, longitude: -124.954, products: ['CTD, Broadband Hydrophones, Meteorological Data'] },
+    { location: 'Oregon Shelf', latitude: 44.6371, longitude: -124.306, products: ['CTD, Broadband Hydrophones, Meteorological Data'] },
+    { location: 'Axial Ashes', latitude: 45.933559, longitude: -129.999207, products: ['OBS'] },
+    { location: 'Axial International', latitude: 45.925732, longitude: -129.977997, products: ['OBS'] },
 ]
 
 const noop = () => { };
@@ -71,7 +68,8 @@ HYDROPHONES.forEach(element => {
     const point = {
         type: "point",
         longitude: element["longitude"],
-        latitude: element["latitude"]
+        latitude: element["latitude"],
+        products: element['products']
     };
     const simpleMarkerSymbol = {
         type: "simple-marker",
@@ -84,13 +82,15 @@ HYDROPHONES.forEach(element => {
 
     const popupTemplate = {
         title: "{Name}",
-        content: "<div>Latitude: {Lat}, Longitude: {Lon}</div>",
+        content: "<div>Latitude: {Lat}, Longitude: {Lon}</div><div>Products: {Prod}</div>",
+        // content: "<div>Products: {Prod}</div>",
         actions: [measureThisAction]
     }
     const attributes = {
         Name: element.location,
         Lat: element.latitude,
         Lon: element.longitude,
+        Prod: element.products,
         Description: "I am a hydrophone"
     }
 
@@ -103,47 +103,6 @@ HYDROPHONES.forEach(element => {
     view.graphics.add(pointGraphic);
 });
 
-OBS_HYDROPHONES.forEach(element => {
-    const measureThisAction = {
-        title: "Explore Data",
-        id: "show_popup",
-        location: element.location
-    };
-
-    const point = {
-        type: "point",
-        longitude: element["longitude"],
-        latitude: element["latitude"]
-    };
-    const simpleMarkerSymbol = {
-        type: "simple-marker",
-        color: [105, 204, 164],  // Green
-        outline: {
-            color: [255, 255, 255], // White
-            width: 1
-        }
-    };
-
-    const popupTemplate = {
-        title: "{Name}",
-        content: "<div>Latitude: {Lat}, Longitude: {Lon}</div>",
-        actions: [measureThisAction]
-    }
-    const attributes = {
-        Name: element.location,
-        Lat: element.latitude,
-        Lon: element.longitude,
-        Description: "I am a hydrophone"
-    }
-
-    const pointGraphic = new Graphic({
-        geometry: point,
-        symbol: simpleMarkerSymbol,
-        attributes: attributes,
-        popupTemplate: popupTemplate
-    });
-    view.graphics.add(pointGraphic);
-});
 // const polygon = {
 //     type: "polygon",
 //     rings: [

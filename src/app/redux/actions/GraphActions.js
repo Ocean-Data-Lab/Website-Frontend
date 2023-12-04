@@ -41,9 +41,9 @@ export const getCTPInitialGraphLine = (location, date) => (dispatch) => {
         })
 }
 
-export const getUpdatedGraph = (startDate, endDate, graphType, location, frequency) => (dispatch) => {
+export const getUpdatedGraph = (startDate, endDate, graphType, selectedValue, location, frequency) => (dispatch) => {
     axios
-        .post('/api/getUpdatedGraph', { startDate, endDate, graphType, location, frequency })
+        .post('/api/getUpdatedGraph', { startDate, endDate, graphType, selectedValue, location, frequency })
         .then((res) => {
             dispatch({
                 type: GET_UPDATE_GRAPH,

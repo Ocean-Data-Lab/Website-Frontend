@@ -65,6 +65,8 @@ const specValid = [
     'Axial International',
 ]
 
+// OBS Data Valid Locations
+
 const obsValid = [
     'Axial Base',
     'Slope Base',
@@ -95,12 +97,8 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
     const handleUpdateGraph = () => {
         setLoading(true)
         setCurrType(graphType)
-        if (selectedValue == 'OBS') {
-            setGraphType('OBS')
-            setCurrType('OBS')
-        }
         dispatch(
-            getUpdatedGraph(startDate, endDate, graphType, location, frequency)
+            getUpdatedGraph(startDate, endDate, graphType, selectedValue, location, frequency)
         )
     }
 
@@ -124,11 +122,6 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
         if (frequency < 1 || frequency > 80) return true
         return false
     }
-
-    // const checkDates = () => {
-    //     if (Math.abs(Date.parse(endDate) - Date.parse(startDate))/(1000*3600) > 48) return true
-    //     return false
-    // }
 
     const checkAvgTime = () => {
         if (avg_time < 1 || avg_time > 3600) return true
@@ -171,7 +164,7 @@ const Spectrogram = ({ currentLocation, selectedValue }) => {
     }, [currentLocation])
 
     useEffect(() => {
-        if (currType === 'Spectrogram' || currType === 'OBS' || currType === 'Octave Band' || currType === 'ST Spectrogram') {
+        if (currType === 'Spectrogram' || currType === 'Octave Band' || currType === 'ST Spectrogram') {
             if (Object.keys(initSpecGraph).length !== 0) {
                 setLoading(false)
                 const outer = document.getElementById('outer')
