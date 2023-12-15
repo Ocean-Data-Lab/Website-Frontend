@@ -119,6 +119,9 @@ const Layout1Topbar = () => {
                     <Link to="/Video">
                         <Options>Gallery</Options>
                     </Link>
+                    <a href="https://ocean-noise-explorer.readthedocs.io/en/latest" target="_blank" rel="noopener noreferrer">
+                        <Options>Documentation</Options>
+                    </a>
                     {/* <Options>Videos</Options> */}
                     <Options onClick={toggleDrawer(anchor, true)}>
                         About
@@ -163,7 +166,7 @@ const Layout1Topbar = () => {
                                 >
                                     Ocean Data Lab&nbsp;
                                 </a>
-                                at the University of washington has developped
+                                at the University of Washington have developped
                                 ocean noise explorer (ONE), a web-based
                                 interactive ocean soundscape that will enable
                                 users to visualize and explore a wide variety of
